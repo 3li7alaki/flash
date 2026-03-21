@@ -108,7 +108,7 @@ describe("listTemplates with user templates", () => {
 
 	beforeEach(async () => {
 		tempDir = join(tmpdir(), `fc-test-templates-${Date.now()}`);
-		const userTemplatesDir = join(tempDir, "fc", "templates");
+		const userTemplatesDir = join(tempDir, "flash", "templates");
 		await mkdir(userTemplatesDir, { recursive: true });
 		await writeFile(
 			join(userTemplatesDir, "my-custom.fc"),

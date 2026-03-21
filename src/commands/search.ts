@@ -41,7 +41,7 @@ export async function searchCommand(
 ): Promise<void> {
 	const query = args[0];
 	if (!query) {
-		console.error("Usage: fc search <query>");
+		console.error("Usage: flash search <query>");
 		process.exitCode = 1;
 		return;
 	}

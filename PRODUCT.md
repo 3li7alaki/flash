@@ -338,10 +338,10 @@ API key can also be set via `FLASH_API_KEY` environment variable (takes preceden
 src/
   ├── cli.ts               # Entry point, command routing
   ├── commands/             # Command handlers
-  ├── format/               # .flash parser, serializer, linter, fixer, CSV
+  ├── format/               # .fc parser, serializer, linter, fixer, CSV
   │   ├── parser.ts         # .fc → card objects
-  │   ├── serializer.ts     # card objects → .flash text
-  │   ├── linter.ts         # validate .flash files
+  │   ├── serializer.ts     # card objects → .fc text
+  │   ├── linter.ts         # validate .fc files
   │   ├── fixer.ts          # auto-fix format issues
   │   └── csv.ts            # CSV import/export
   ├── agents/               # Agent definitions (prompts + schemas)
@@ -361,9 +361,15 @@ src/
   │   └── engine.ts
   ├── config/               # Config management
   │   └── config.ts
-  └── claude-code/          # Claude Code skills + composite agents
-      ├── skills/
-      └── agents/
+  └── types.ts              # Shared type definitions
+
+skills/
+  └── flash/SKILL.md         # Claude Code skill definition
+
+agents/                       # Claude Code composite agent prompts
+  ├── quiz-agent.md
+  ├── coach-agent.md
+  └── generator-agent.md
 
 docs/
   └── adr/                  # Architecture Decision Records
@@ -412,49 +418,3 @@ This means users never face broken configs after updating.
 - Bun version is compatible
 - Git is available (for sync/share features)
 
----
-
-## Phased Delivery
-
-### Phase 1 — Core CLI (offline, no AI)
-Everything needed to create, review, and manage flashcards without an API key.
-
-- `.fc` format parser/serializer (all card types: Q/A, cloze, code-output, reversible)
-- Format tooling: linter (`flash lint`), fixer (`flash fix`), CSV import/export
-- Round-trip test: `.fc` → CSV → `.fc` produces identical output
-- Deck management: `flash new`, `flash add`, `flash edit`, `flash list`, `flash search`, `flash merge`
-- Review engine with FSRS-5 scheduling, tag filtering, interleaved mode
-- Self-grading during review (again/hard/good/easy)
-- Stats and daily dashboard
-- Config system with migration support
-- Deck templates
-- CLI maintenance: `flash version`, `flash update`, `flash doctor`
-- Install script (one-liner, bootstraps Bun)
-
-### Phase 2 — AI Integration
-Agent-powered AI features via OpenRouter.
-
-- Agent architecture: client, prompt system, structured I/O
-- Grader Agent → AI answer grading in `flash review`
-- Generator Agent → `flash gen` from topics, files, URLs, stdin
-- Teacher Agent → `flash learn` Socratic mode
-- Analyzer Agent → `flash weak`, enhanced `flash daily`
-- Explainer Agent → `flash explain`, `flash rephrase`
-- Challenger Agent → `flash challenge`
-- Summarizer Agent → `flash summarize`
-
-### Phase 3 — Claude Code Integration
-Same agents, conversational interface.
-
-- `/fc` slash command skills
-- Quiz Agent (wraps Grader) — conversational review with confidence detection
-- Coach Agent (wraps Analyzer) — personalized learning patterns
-- Generator Agent (Claude Code) — cards from conversation context
-
-### Phase 4 — Ecosystem
-Sharing, sync, and polish.
-
-- `flash share` + `flash follow` (git-based deck sharing)
-- `flash sync` (git-based multi-device sync)
-- `flash watch <dir>` — auto-generate cards from new files
-- Optional TUI mode with richer terminal UI

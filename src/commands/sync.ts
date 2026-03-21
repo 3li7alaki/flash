@@ -12,7 +12,7 @@ export async function syncCommand(
 	const followed = config.followed ?? [];
 
 	if (followed.length === 0) {
-		console.log("Nothing to sync. Use `fc follow <url>` first.");
+		console.log("Nothing to sync. Use `flash follow <url>` first.");
 		return;
 	}
 

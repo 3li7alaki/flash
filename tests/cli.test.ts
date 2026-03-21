@@ -121,7 +121,7 @@ describe("CLI integration", () => {
 
 	test("share without args prints usage", async () => {
 		const { stdout, exitCode } = await runCli("share");
-		expect(stdout).toContain("Usage: fc share");
+		expect(stdout).toContain("Usage: flash share");
 		expect(exitCode).toBe(1);
 	});
 });

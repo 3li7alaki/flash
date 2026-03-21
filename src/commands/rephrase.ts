@@ -13,7 +13,7 @@ export async function rephraseCommand(
 ): Promise<void> {
 	const cardId = args[0];
 	if (!cardId) {
-		console.error("Usage: fc rephrase <card-id>");
+		console.error("Usage: flash rephrase <card-id>");
 		process.exitCode = 1;
 		return;
 	}

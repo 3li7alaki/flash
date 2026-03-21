@@ -29,9 +29,9 @@ export function getDefaultConfig(): FcConfig {
 export function getConfigDir(): string {
 	const xdg = process.env.XDG_CONFIG_HOME;
 	if (xdg) {
-		return join(xdg, "fc");
+		return join(xdg, "flash");
 	}
-	return join(homedir(), ".config", "fc");
+	return join(homedir(), ".config", "flash");
 }
 
 export function getConfigPath(): string {

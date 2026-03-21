@@ -3,13 +3,13 @@ import { existsSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 
 /**
- * Detect the fc install directory by walking up from the source file.
+ * Detect the flash install directory by walking up from the source file.
  */
 function findInstallDir(): string | null {
 	// Start from the directory containing this source file
 	let dir = resolve(dirname(import.meta.dir));
 
-	// Walk up to find a directory with a .git folder and package.json with name "fc"
+	// Walk up to find a directory with a .git folder and package.json
 	for (let i = 0; i < 10; i++) {
 		if (
 			existsSync(join(dir, ".git")) &&
@@ -47,6 +47,11 @@ export async function updateCommand(
 	}
 
 	try {
+		// Ensure LF line endings (WSL with Windows git may default to CRLF)
+		execSync("git config core.autocrlf input", {
+			cwd: installDir,
+			stdio: "pipe",
+		});
 		execSync("git fetch origin", { cwd: installDir, stdio: "pipe" });
 
 		// Check if there are updates

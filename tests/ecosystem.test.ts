@@ -10,17 +10,21 @@ import { loadConfig, saveConfig } from "../src/config/config.ts";
 
 describe("repoNameFromDeck", () => {
 	test("generates correct repo name from deck name", () => {
-		expect(repoNameFromDeck("rust-ownership")).toBe("fc-deck-rust-ownership");
+		expect(repoNameFromDeck("rust-ownership")).toBe(
+			"flash-deck-rust-ownership",
+		);
 	});
 
 	test("generates correct repo name from path", () => {
 		expect(repoNameFromDeck("/home/user/flashcards/rust-ownership.fc")).toBe(
-			"fc-deck-rust-ownership",
+			"flash-deck-rust-ownership",
 		);
 	});
 
 	test("handles deck name with spaces via kebab conversion", () => {
-		expect(repoNameFromDeck("Rust Ownership")).toBe("fc-deck-rust-ownership");
+		expect(repoNameFromDeck("Rust Ownership")).toBe(
+			"flash-deck-rust-ownership",
+		);
 	});
 });
 

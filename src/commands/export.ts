@@ -10,7 +10,7 @@ export async function exportCommand(
 ): Promise<void> {
 	const deckName = args[0];
 	if (!deckName) {
-		console.error("Usage: fc export <deck> [--format csv] [--output file]");
+		console.error("Usage: flash export <deck> [--format csv] [--output file]");
 		process.exitCode = 1;
 		return;
 	}

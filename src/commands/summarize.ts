@@ -11,7 +11,7 @@ export async function summarizeCommand(
 ): Promise<void> {
 	const deckName = args[0];
 	if (!deckName) {
-		console.error("Usage: fc summarize <deck>");
+		console.error("Usage: flash summarize <deck>");
 		process.exitCode = 1;
 		return;
 	}

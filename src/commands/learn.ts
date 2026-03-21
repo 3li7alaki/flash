@@ -8,7 +8,7 @@ export async function learnCommand(
 ): Promise<void> {
 	const topic = args.join(" ");
 	if (!topic) {
-		console.error("Usage: fc learn <topic>");
+		console.error("Usage: flash learn <topic>");
 		process.exitCode = 1;
 		return;
 	}

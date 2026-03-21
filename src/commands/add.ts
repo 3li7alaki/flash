@@ -13,7 +13,7 @@ export async function addCommand(
 ): Promise<void> {
 	const deckNameOrPath = args[0];
 	if (!deckNameOrPath) {
-		console.error("Usage: fc add <deck>");
+		console.error("Usage: flash add <deck>");
 		process.exitCode = 1;
 		return;
 	}

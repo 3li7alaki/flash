@@ -4,11 +4,11 @@ import { findDeck, toKebabCase } from "./utils.ts";
 
 /**
  * Derive the GitHub repo name from a deck name or path.
- * "Rust Ownership" -> "fc-deck-rust-ownership"
+ * "Rust Ownership" -> "flash-deck-rust-ownership"
  */
 export function repoNameFromDeck(deckNameOrPath: string): string {
 	const name = basename(deckNameOrPath, ".fc");
-	return `fc-deck-${toKebabCase(name)}`;
+	return `flash-deck-${toKebabCase(name)}`;
 }
 
 /**
@@ -33,7 +33,7 @@ export async function shareCommand(
 ): Promise<void> {
 	const deckName = args[0];
 	if (!deckName) {
-		console.error("Usage: fc share <deck>");
+		console.error("Usage: flash share <deck>");
 		process.exitCode = 1;
 		return;
 	}
@@ -66,12 +66,12 @@ export async function shareCommand(
 		// Write a README
 		const readme = `# ${repoName}
 
-Flashcard deck for [fc](https://github.com/ahalaki/fc).
+Flashcard deck for [flash](https://github.com/3li7alaki/flash).
 
 ## Usage
 
 \`\`\`bash
-fc follow <this-repo-url>
+flash follow <this-repo-url>
 \`\`\`
 `;
 		await Bun.write(join(tmpDir, "README.md"), readme);

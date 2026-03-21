@@ -6,8 +6,8 @@ import { parseDeck } from "../format/parser.ts";
 
 /**
  * Extract repo name from a GitHub URL.
- * "https://github.com/user/fc-deck-rust" -> "fc-deck-rust"
- * "git@github.com:user/fc-deck-rust.git" -> "fc-deck-rust"
+ * "https://github.com/user/flash-deck-rust" -> "flash-deck-rust"
+ * "git@github.com:user/flash-deck-rust.git" -> "flash-deck-rust"
  */
 export function repoNameFromUrl(url: string): string {
 	const cleaned = url.replace(/\.git$/, "").replace(/\/$/, "");
@@ -21,7 +21,7 @@ export async function followCommand(
 ): Promise<void> {
 	const url = args[0];
 	if (!url) {
-		console.error("Usage: fc follow <github-url>");
+		console.error("Usage: flash follow <github-url>");
 		process.exitCode = 1;
 		return;
 	}

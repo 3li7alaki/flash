@@ -81,7 +81,7 @@ export async function mergeCommand(
 ): Promise<void> {
 	const [deck1Name, deck2Name] = args;
 	if (!deck1Name || !deck2Name) {
-		console.error("Usage: fc merge <deck1> <deck2>");
+		console.error("Usage: flash merge <deck1> <deck2>");
 		process.exitCode = 1;
 		return;
 	}

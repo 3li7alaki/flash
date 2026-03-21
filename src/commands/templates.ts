@@ -10,7 +10,7 @@ export interface TemplateInfo {
 }
 
 /**
- * Returns the path to the built-in templates directory shipped with fc.
+ * Returns the path to the built-in templates directory shipped with flash.
  */
 export function getTemplatesDir(): string {
 	return join(import.meta.dir, "../../templates");
@@ -129,5 +129,5 @@ export async function templatesCommand(
 	}
 
 	console.log("");
-	console.log('Use: fc new "My Deck" --template interview-prep');
+	console.log('Use: flash new "My Deck" --template interview-prep');
 }

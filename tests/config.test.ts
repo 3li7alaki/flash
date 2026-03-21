@@ -43,13 +43,13 @@ describe("getConfigDir", () => {
 
 	test("uses XDG_CONFIG_HOME when set", () => {
 		process.env.XDG_CONFIG_HOME = "/tmp/custom-config";
-		expect(getConfigDir()).toBe("/tmp/custom-config/fc");
+		expect(getConfigDir()).toBe("/tmp/custom-config/flash");
 	});
 
 	test("falls back to ~/.config/flash when XDG_CONFIG_HOME is not set", () => {
 		delete process.env.XDG_CONFIG_HOME;
 		const home = process.env.HOME ?? "";
-		expect(getConfigDir()).toBe(join(home, ".config", "fc"));
+		expect(getConfigDir()).toBe(join(home, ".config", "flash"));
 	});
 });
 
@@ -57,7 +57,7 @@ describe("getConfigPath", () => {
 	test("returns config.json inside config dir", () => {
 		const path = getConfigPath();
 		expect(path.endsWith("config.json")).toBe(true);
-		expect(path).toContain("fc");
+		expect(path).toContain("flash");
 	});
 });
 

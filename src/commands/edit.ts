@@ -18,7 +18,7 @@ export async function editCommand(
 ): Promise<void> {
 	const deckNameOrPath = args[0];
 	if (!deckNameOrPath) {
-		console.error("Usage: fc edit <deck>");
+		console.error("Usage: flash edit <deck>");
 		process.exitCode = 1;
 		return;
 	}

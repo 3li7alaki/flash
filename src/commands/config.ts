@@ -97,7 +97,7 @@ export async function configCommand(
 	if (subcommand === "get") {
 		const key = args[1];
 		if (!key) {
-			console.error("Usage: fc config get <key>");
+			console.error("Usage: flash config get <key>");
 			process.exitCode = 1;
 			return;
 		}
@@ -116,7 +116,7 @@ export async function configCommand(
 		const key = args[1];
 		const value = args[2];
 		if (!key || value === undefined) {
-			console.error("Usage: fc config set <key> <value>");
+			console.error("Usage: flash config set <key> <value>");
 			process.exitCode = 1;
 			return;
 		}

@@ -17,7 +17,7 @@ function setupTempEnv(): {
 	cleanup: () => void;
 } {
 	const base = mkdtempSync(join(tmpdir(), "fc-test-"));
-	const configDir = join(base, "config", "fc");
+	const configDir = join(base, "config", "flash");
 	const decksDir = join(base, "decks");
 	mkdirSync(configDir, { recursive: true });
 	mkdirSync(decksDir, { recursive: true });

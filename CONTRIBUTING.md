@@ -17,14 +17,15 @@
 flash/
 ├── src/
 │   ├── commands/          # CLI command handlers
-│   ├── format/            # .flash parser and serializer
+│   ├── format/            # .fc parser and serializer
 │   ├── scheduler/         # FSRS-5 implementation
 │   ├── ai/                # OpenRouter integration
-│   ├── claude-code/       # Skills and agent definitions
 │   └── review/            # Interactive review engine
+├── agents/                # Claude Code composite agent prompts
+├── skills/                # Claude Code skill definitions
 ├── templates/             # Deck templates
 ├── tests/                 # Test suite
-├── VISION.md              # Full scope and design decisions
+├── PRODUCT.md             # Product specification and design decisions
 └── README.md
 ```
 

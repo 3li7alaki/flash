@@ -5,29 +5,31 @@
 set -euo pipefail
 
 REPO="3li7alaki/flash"
-FC_HOME="$HOME/.flash"
+FLASH_HOME="$HOME/.flash"
 LINK_DIR="$HOME/.local/bin"
-CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/fc"
+CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/flash"
 DECKS_DIR="$HOME/flashcards"
 
 echo ""
 echo "  flash — flashcard CLI with AI superpowers"
 echo ""
 
-# ─── Step 1: Clone or update flash repo ──────────────────────────────────────────
+# ─── Step 1: Clone or update flash repo ──────────────────────────────────────
 
-if [ -d "$FC_HOME/.git" ]; then
+if [ -d "$FLASH_HOME/.git" ]; then
   echo "  Updating flash..."
-  git -C "$FC_HOME" fetch origin main -q 2>/dev/null || true
-  git -C "$FC_HOME" clean -fd -q 2>/dev/null || true
-  git -C "$FC_HOME" reset --hard origin/main -q 2>/dev/null || true
+  # Ensure LF line endings (WSL with Windows git may default to CRLF)
+  git -C "$FLASH_HOME" config core.autocrlf input
+  git -C "$FLASH_HOME" fetch origin main -q 2>/dev/null || true
+  git -C "$FLASH_HOME" clean -fd -q 2>/dev/null || true
+  git -C "$FLASH_HOME" reset --hard origin/main -q 2>/dev/null || true
   MODE="update"
 else
   echo "  Installing flash..."
-  git clone -q "https://github.com/$REPO.git" "$FC_HOME" 2>/dev/null || {
+  git clone -q -c core.autocrlf=input "https://github.com/$REPO.git" "$FLASH_HOME" 2>/dev/null || {
     # If clone fails (dir exists but not git), remove and retry
-    rm -rf "$FC_HOME"
-    git clone -q "https://github.com/$REPO.git" "$FC_HOME"
+    rm -rf "$FLASH_HOME"
+    git clone -q -c core.autocrlf=input "https://github.com/$REPO.git" "$FLASH_HOME"
   }
   MODE="install"
 fi
@@ -58,22 +60,22 @@ fi
 
 # ─── Step 3: Install dependencies ─────────────────────────────────────────────
 
-(cd "$FC_HOME" && bun install --frozen-lockfile 2>/dev/null || bun install 2>/dev/null) || {
+(cd "$FLASH_HOME" && bun install --frozen-lockfile 2>/dev/null || bun install 2>/dev/null) || {
   echo "  ✗ Failed to install dependencies."
   exit 1
 }
 
 # ─── Step 4: Make CLI globally available ───────────────────────────────────────
 
-FC_BIN="$FC_HOME/src/cli.ts"
-if [ -f "$FC_BIN" ]; then
-  chmod +x "$FC_BIN"
+FLASH_BIN="$FLASH_HOME/src/cli.ts"
+if [ -f "$FLASH_BIN" ]; then
+  chmod +x "$FLASH_BIN"
 
   mkdir -p "$LINK_DIR"
-  ln -sf "$FC_BIN" "$LINK_DIR/fc"
-  echo "  ✓ CLI linked: $LINK_DIR/fc"
+  ln -sf "$FLASH_BIN" "$LINK_DIR/flash"
+  echo "  ✓ CLI linked: $LINK_DIR/flash"
 else
-  echo "  ✗ CLI not found at $FC_BIN"
+  echo "  ✗ CLI not found at $FLASH_BIN"
   exit 1
 fi
 
@@ -123,7 +125,7 @@ fi
 
 # ─── Done ──────────────────────────────────────────────────────────────────────
 
-VERSION=$(grep -o '"version": "[^"]*"' "$FC_HOME/package.json" 2>/dev/null | head -1 | grep -o '[0-9][^"]*' || echo "unknown")
+VERSION=$(grep -o '"version": "[^"]*"' "$FLASH_HOME/package.json" 2>/dev/null | head -1 | grep -o '[0-9][^"]*' || echo "unknown")
 
 echo ""
 if [ "$MODE" = "update" ]; then

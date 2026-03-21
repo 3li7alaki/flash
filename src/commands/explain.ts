@@ -10,7 +10,7 @@ export async function explainCommand(
 ): Promise<void> {
 	const cardId = args[0];
 	if (!cardId) {
-		console.error("Usage: fc explain <card-id>");
+		console.error("Usage: flash explain <card-id>");
 		process.exitCode = 1;
 		return;
 	}

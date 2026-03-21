@@ -15,7 +15,7 @@ export async function importCommand(
 ): Promise<void> {
 	const csvPath = args[0];
 	if (!csvPath) {
-		console.error("Usage: fc import <csv-file> [deck-name]");
+		console.error("Usage: flash import <csv-file> [deck-name]");
 		process.exitCode = 1;
 		return;
 	}
