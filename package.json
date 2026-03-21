@@ -1,28 +1,28 @@
 {
-  "name": "fc",
-  "version": "0.1.0",
-  "module": "src/cli.ts",
-  "type": "module",
-  "bin": {
-    "fc": "src/cli.ts"
-  },
-  "scripts": {
-    "lint": "biome check .",
-    "lint:fix": "biome check --write .",
-    "types": "tsc --noEmit",
-    "test": "bun test",
-    "dev": "bun run src/cli.ts"
-  },
-  "private": true,
-  "devDependencies": {
-    "@biomejs/biome": "^2.4.8",
-    "@types/bun": "latest"
-  },
-  "peerDependencies": {
-    "typescript": "^5"
-  },
-  "dependencies": {
-    "@clack/prompts": "^1.1.0",
-    "ts-fsrs": "^5.3.1"
-  }
+	"name": "fc",
+	"version": "0.1.0",
+	"module": "src/cli.ts",
+	"type": "module",
+	"bin": {
+		"fc": "src/cli.ts"
+	},
+	"scripts": {
+		"lint": "biome check .",
+		"lint:fix": "biome check --write .",
+		"types": "tsc --noEmit",
+		"test": "bun test",
+		"dev": "bun run src/cli.ts"
+	},
+	"private": true,
+	"devDependencies": {
+		"@biomejs/biome": "^2.4.8",
+		"@types/bun": "latest"
+	},
+	"peerDependencies": {
+		"typescript": "^5"
+	},
+	"dependencies": {
+		"@clack/prompts": "^1.1.0",
+		"ts-fsrs": "^5.3.1"
+	}
 }
