@@ -1,3 +1,4 @@
+import { existsSync, statSync } from "node:fs";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { homedir } from "node:os";
 import { dirname, join } from "node:path";
@@ -144,7 +145,10 @@ export function migrateConfig(config: FcConfig): {
 	return { config: current, migrated, changes };
 }
 
-export function resolveDecksDir(config: FcConfig): string {
+/**
+ * Resolve the global decks directory from config (expands ~).
+ */
+export function resolveGlobalDecksDir(config: FcConfig): string {
 	const dir = config.decksDir;
 	if (dir.startsWith("~/")) {
 		return join(homedir(), dir.slice(2));
@@ -153,6 +157,28 @@ export function resolveDecksDir(config: FcConfig): string {
 		return homedir();
 	}
 	return dir;
+}
+
+/**
+ * Resolve the decks directory with local discovery.
+ * Walks up from cwd looking for .flashcards/ — falls back to global decksDir.
+ * This is what all commands use by default.
+ */
+export function resolveDecksDir(config: FcConfig): string {
+	// Walk up from cwd looking for .flashcards/ directory
+	let dir = process.cwd();
+	for (let i = 0; i < 20; i++) {
+		const candidate = join(dir, ".flashcards");
+		if (existsSync(candidate) && statSync(candidate).isDirectory()) {
+			return candidate;
+		}
+		const parent = dirname(dir);
+		if (parent === dir) break;
+		dir = parent;
+	}
+
+	// Fall back to global config
+	return resolveGlobalDecksDir(config);
 }
 
 export function getApiKey(config: FcConfig): string {

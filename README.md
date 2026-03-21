@@ -69,6 +69,8 @@ tags: reliability
 
 **Your data, your files.** `.fc` files are plain text — diff them, version them, share them via git. Review state lives in separate `.fc.state` JSON files so your content stays clean.
 
+**Project-local decks.** Create a `.flashcards/` directory in any project and flash auto-discovers it. Great for team-shared study decks, certification prep alongside code, or keeping decks close to the content they cover. Falls back to `~/flashcards` when no local directory is found.
+
 ### AI-Powered (via OpenRouter)
 
 All AI features are powered by a unified agent architecture — the same agents work in both CLI and Claude Code. Requires an API key; core review works fully offline without one.

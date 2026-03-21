@@ -90,11 +90,13 @@ All metadata is optional. A file with just cards and `---` separators is valid.
 | Type | Detection | Description |
 |------|-----------|-------------|
 | **Q/A** | Default (no `type:` needed) | Standard question and answer |
+| **MCQ** | `type: mcq` + `choices:` field | Multiple choice — choices shown as a/b/c/d, answer is correct choice |
+| **True/False** | `type: true-false` or auto-detected from `True`/`False` answer | Binary true/false question |
 | **Cloze** | Auto-detected from `{{}}` in question | Fill-in-the-blank — hidden text is the answer |
 | **Code Output** | `type: code-output` | "What does this code do/print?" |
 | **Reversible** | `reversible: true` | Auto-generates A→Q direction for bidirectional recall |
 
-Cloze is auto-detected — if the question contains `{{text}}`, it's a cloze card. No `type: cloze` needed. `type: code-output` is explicit because there's no syntax signal to auto-detect it.
+Cloze is auto-detected — if the question contains `{{text}}`, it's a cloze card. True-false is auto-detected when the answer is exactly "True" or "False". MCQ is auto-detected when a `choices:` field is present.
 
 ### Card Fields
 
@@ -103,7 +105,8 @@ Cloze is auto-detected — if the question contains `{{text}}`, it's a cloze car
 | `Q:` | yes | Question (multiline — continue with indented lines) |
 | `A:` | yes (except cloze) | Answer (multiline — continue with indented lines) |
 | `tags:` | no | Comma-separated per-card tags |
-| `type:` | no | `code-output` (Q/A is default, cloze is auto-detected) |
+| `type:` | no | `code-output`, `mcq`, `true-false` (Q/A is default, cloze is auto-detected) |
+| `choices:` | no (required for mcq) | Pipe-separated choices: `Option A \| Option B \| Option C \| Option D` |
 | `hint:` | no | Shown before revealing answer |
 | `difficulty:` | no | Manual difficulty override (1-5) |
 | `source:` | no | Origin — url, book title, `ai-generated`, etc. |

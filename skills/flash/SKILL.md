@@ -13,6 +13,8 @@ You have access to the `flash` CLI tool for flashcard management. Use it via Bas
 
 **Important:** All commands support headless (non-interactive) mode via flags. Never rely on interactive prompts — always pass flags directly so commands work in piped/automated contexts.
 
+**Deck discovery:** flash auto-discovers decks by walking up from cwd looking for a `.flashcards/` directory. If found, it uses that instead of the global `~/flashcards`. This means project-local decks work automatically — just create a `.flashcards/` dir in the repo. When writing .fc files directly, use the project's `.flashcards/` if it exists, otherwise `~/flashcards/`.
+
 ## Commands
 
 ### Generate cards from what you see
@@ -122,7 +124,7 @@ You have full codebase access — **always write .fc files directly instead of c
 1. **Read relevant files** to understand the concepts deeply
 2. **Identify key patterns** — API design, architecture decisions, idioms
 3. **Generate targeted cards** that test understanding, not just memorization
-4. **Mix card types** — Q/A for concepts, cloze for terminology, code-output for behavior
+4. **Mix card types** — Q/A for concepts, MCQ for exam prep, true-false for misconceptions, cloze for terminology, code-output for behavior
 5. **Write the .fc file directly** or use `flash add` with `--question`/`--answer` flags
 
 Never call `flash gen` for codebase content — that sends the text to an external LLM when you already have the understanding.

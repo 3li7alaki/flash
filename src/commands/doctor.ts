@@ -8,6 +8,7 @@ import {
 	loadConfig,
 	migrateConfig,
 	resolveDecksDir,
+	resolveGlobalDecksDir,
 	saveConfig,
 } from "../config/config.ts";
 import { parseDeck } from "../format/parser.ts";
@@ -81,8 +82,11 @@ async function checkApiKey(): Promise<CheckResult> {
 async function checkDecksDir(): Promise<CheckResult> {
 	const config = await loadConfig();
 	const dir = resolveDecksDir(config);
+	const globalDir = resolveGlobalDecksDir(config);
+	const isLocal = dir !== globalDir;
 	if (existsSync(dir)) {
-		return { label: "Decks directory", status: "pass", message: dir };
+		const suffix = isLocal ? " (local)" : "";
+		return { label: "Decks directory", status: "pass", message: `${dir}${suffix}` };
 	}
 	return {
 		label: "Decks directory",
