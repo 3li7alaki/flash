@@ -10,6 +10,7 @@ import { lintCommand } from "./commands/lint.ts";
 import { listCommand } from "./commands/list.ts";
 import { mergeCommand } from "./commands/merge.ts";
 import { newCommand } from "./commands/new.ts";
+import { reviewCommand } from "./commands/review.ts";
 import { searchCommand } from "./commands/search.ts";
 
 // --- Flag parsing ---
@@ -139,6 +140,7 @@ commands.search = searchCommand;
 commands.merge = mergeCommand;
 commands.export = exportCommand;
 commands.import = importCommand;
+commands.review = reviewCommand;
 
 // --- Help ---
 
