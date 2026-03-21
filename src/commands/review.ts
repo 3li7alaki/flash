@@ -253,20 +253,34 @@ export async function reviewCommand(
 			}
 		}
 
-		// Collect user answer
-		let answerPromptMsg = useAiGrading
-			? "Your answer:"
-			: "Your answer (press Enter to reveal):";
-		if (card.type === "mcq") {
-			answerPromptMsg = "Your answer (letter):";
-		} else if (card.type === "true-false") {
-			answerPromptMsg = "True or false? (a/b):";
-		}
+		// Collect user answer — select for MCQ/true-false, text for others
+		let userAnswer: string | symbol;
 
-		const userAnswer = await prompts.text({
-			message: answerPromptMsg,
-			defaultValue: "",
-		});
+		if (card.type === "mcq" && card.choices) {
+			const letters = "abcdefghijklmnopqrstuvwxyz";
+			userAnswer = await prompts.select({
+				message: "Your answer:",
+				options: card.choices.map((choice, i) => ({
+					value: letters[i] ?? String(i),
+					label: `${letters[i]}) ${choice}`,
+				})),
+			});
+		} else if (card.type === "true-false") {
+			userAnswer = await prompts.select({
+				message: "True or false?",
+				options: [
+					{ value: "true", label: "True" },
+					{ value: "false", label: "False" },
+				],
+			});
+		} else {
+			userAnswer = await prompts.text({
+				message: useAiGrading
+					? "Your answer:"
+					: "Your answer (press Enter to reveal):",
+				defaultValue: "",
+			});
+		}
 
 		if (prompts.isCancel(userAnswer)) {
 			await saveState(deckPath, session.state);
