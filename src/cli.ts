@@ -9,6 +9,7 @@ import { editCommand } from "./commands/edit.ts";
 import { explainCommand } from "./commands/explain.ts";
 import { exportCommand } from "./commands/export.ts";
 import { fixCommand } from "./commands/fix.ts";
+import { followCommand } from "./commands/follow.ts";
 import { genCommand } from "./commands/gen.ts";
 import { importCommand } from "./commands/import.ts";
 import { learnCommand } from "./commands/learn.ts";
@@ -19,8 +20,10 @@ import { newCommand } from "./commands/new.ts";
 import { rephraseCommand } from "./commands/rephrase.ts";
 import { reviewCommand } from "./commands/review.ts";
 import { searchCommand } from "./commands/search.ts";
+import { shareCommand } from "./commands/share.ts";
 import { statsCommand } from "./commands/stats.ts";
 import { summarizeCommand } from "./commands/summarize.ts";
+import { syncCommand } from "./commands/sync.ts";
 import { templatesCommand } from "./commands/templates.ts";
 import { updateCommand } from "./commands/update.ts";
 import { versionCommand } from "./commands/version.ts";
@@ -164,6 +167,9 @@ commands.explain = explainCommand;
 commands.rephrase = rephraseCommand;
 commands.challenge = challengeCommand;
 commands.summarize = summarizeCommand;
+commands.share = shareCommand;
+commands.follow = followCommand;
+commands.sync = syncCommand;
 
 // --- Help ---
 

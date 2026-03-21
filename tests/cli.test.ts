@@ -119,8 +119,9 @@ describe("CLI integration", () => {
 		expect(exitCode).toBe(1);
 	});
 
-	test("stub command prints not implemented", async () => {
-		const { stdout } = await runCli("share");
-		expect(stdout).toContain("Not implemented yet");
+	test("share without args prints usage", async () => {
+		const { stdout, exitCode } = await runCli("share");
+		expect(stdout).toContain("Usage: fc share");
+		expect(exitCode).toBe(1);
 	});
 });

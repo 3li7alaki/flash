@@ -69,6 +69,7 @@ export interface FcConfig {
 	decksDir: string;
 	editor: string;
 	version?: number;
+	followed?: Array<{ url: string; name: string; lastSync: string }>;
 }
 
 // --- Linter ---
