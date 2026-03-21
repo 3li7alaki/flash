@@ -19,27 +19,39 @@ You have access to the `flash` CLI tool for flashcard management. Use it via Bas
 
 When the user asks to generate flashcards from code, docs, or context:
 
-1. **From the current codebase** — read relevant files, understand patterns, then generate cards:
-   ```bash
-   flash gen "topic description"
-   ```
-   But better: use your codebase knowledge to build higher-quality cards. Read the files yourself, understand the concepts, then write a .fc file directly or pipe content to flash gen.
+1. **From the current codebase (preferred — free, no API cost):** Read the relevant files yourself, understand the patterns/concepts, then write a `.fc` file directly or use `flash add` with flags. Do NOT call `flash gen` for codebase content — you already have the context, so writing cards directly is faster, higher quality, and costs nothing.
 
-2. **From a file** (including PDFs):
+   ```bash
+   # Write a .fc file directly
+   cat > ~/flashcards/auth-patterns.fc << 'EOF'
+   @deck Auth Patterns
+   @tags auth, middleware
+
+   ---
+   Q: What middleware validates JWT tokens in this project?
+   A: The authMiddleware in src/auth/middleware.ts — it checks the Authorization header and validates against the JWKS endpoint.
+   tags: jwt, middleware
+   ---
+   EOF
+
+   # Or add cards one at a time
+   flash add auth-patterns --question 'What happens on token expiry?' --answer 'Returns 401 and sets WWW-Authenticate header' --tags 'jwt,auth'
+   ```
+
+2. **From a file or PDF (uses API):** Only use `flash gen --from` for external content you haven't read — PDFs, articles, files outside the codebase.
    ```bash
    flash gen --from path/to/file.pdf
    flash gen --from path/to/notes.md
-   flash gen --from path/to/code.ts
    ```
 
-3. **From a URL:**
+3. **From a URL (uses API):**
    ```bash
    flash gen --from https://example.com/article
    ```
 
-4. **From conversation context** — if the user has been discussing a topic, summarize the key concepts and generate cards:
+4. **From a topic (uses API):** When the user wants cards on a general topic, not codebase-specific.
    ```bash
-   echo "key concepts from our conversation" | flash gen
+   flash gen "TCP/IP fundamentals"
    ```
 
 ### Review cards
@@ -105,20 +117,22 @@ flash sync                       # Pull updates
 
 ## When generating cards from code
 
-You have an advantage over the CLI — you can read and understand the entire codebase. Use this:
+You have full codebase access — **always write .fc files directly instead of calling `flash gen`**. This is free (no API cost), faster, and produces better cards because you understand the code semantically.
 
 1. **Read relevant files** to understand the concepts deeply
 2. **Identify key patterns** — API design, architecture decisions, idioms
 3. **Generate targeted cards** that test understanding, not just memorization
 4. **Mix card types** — Q/A for concepts, cloze for terminology, code-output for behavior
-5. **Write cards in .fc format** and save directly, or pipe through `flash gen`
+5. **Write the .fc file directly** or use `flash add` with `--question`/`--answer` flags
+
+Never call `flash gen` for codebase content — that sends the text to an external LLM when you already have the understanding.
 
 Example flow:
 ```
 User: "make flashcards about this project's auth system"
 You: [read auth-related files, understand the flow]
-You: [generate cards about JWT handling, middleware, session management]
-You: [save as auth-patterns.fc in the decks directory]
+You: [write auth-patterns.fc directly with targeted cards]
+You: [run `flash lint auth-patterns` to validate the format]
 ```
 
 ## Card format reference
