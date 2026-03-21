@@ -1,0 +1,7 @@
+node_modules/
+dist/
+.mint/tasks/
+.mint/research/
+.mint/worktrees/
+.mint/plugins/
+.mint/.session-state.json

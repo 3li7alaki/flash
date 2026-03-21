@@ -1,0 +1,34 @@
+{
+  "stack": "typescript",
+  "packageManager": "bun",
+  "gates": {
+    "lint": "",
+    "types": "",
+    "tests": ""
+  },
+  "reviewers": {
+    "spec": true,
+    "quality": true,
+    "security": true,
+    "conventions": true,
+    "tests": true,
+    "business": true,
+    "performance": false
+  },
+  "conventions": {
+    "docs": ["CONTRIBUTING.md", "docs/adr/"]
+  },
+  "business": {
+    "docs": ["PRODUCT.md"]
+  },
+  "definitionOfDone": {
+    "docCheckPassed": true
+  },
+  "isolation": {
+    "plan": "worktree",
+    "ship": "worktree",
+    "quick": "branch"
+  },
+  "documenters": [],
+  "plugins": []
+}
