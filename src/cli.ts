@@ -1,6 +1,16 @@
 #!/usr/bin/env bun
 
 import { version } from "../package.json";
+import { addCommand } from "./commands/add.ts";
+import { editCommand } from "./commands/edit.ts";
+import { exportCommand } from "./commands/export.ts";
+import { fixCommand } from "./commands/fix.ts";
+import { importCommand } from "./commands/import.ts";
+import { lintCommand } from "./commands/lint.ts";
+import { listCommand } from "./commands/list.ts";
+import { mergeCommand } from "./commands/merge.ts";
+import { newCommand } from "./commands/new.ts";
+import { searchCommand } from "./commands/search.ts";
 
 // --- Flag parsing ---
 
@@ -118,6 +128,17 @@ for (const group of Object.values(COMMAND_GROUPS)) {
 commands.version = async () => {
 	console.log(`fc v${version}`);
 };
+
+commands.new = newCommand;
+commands.add = addCommand;
+commands.edit = editCommand;
+commands.lint = lintCommand;
+commands.fix = fixCommand;
+commands.list = listCommand;
+commands.search = searchCommand;
+commands.merge = mergeCommand;
+commands.export = exportCommand;
+commands.import = importCommand;
 
 // --- Help ---
 
