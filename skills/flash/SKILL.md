@@ -159,4 +159,15 @@ A: 3
 type: code-output
 tags: javascript
 ---
+Q: How many tools should an agent ideally have?
+A: b
+type: mcq
+choices: 1-2 | 4-5 | 10-15 | As many as needed
+tags: agent-design
+---
+Q: Subagents inherit the coordinator's conversation history.
+A: False
+type: true-false
+tags: multi-agent
+---
 ```

@@ -1,7 +1,7 @@
 {
 	"name": "flash",
 	"description": "Flashcard CLI with AI superpowers — generate, review, and master flashcards from your terminal and Claude Code",
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"author": {
 		"name": "Ali AlHalaki",
 		"email": "alihalaki@outlook.com"

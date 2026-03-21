@@ -10,6 +10,7 @@ const CSV_COLUMNS = [
 	"difficulty",
 	"source",
 	"reversible",
+	"choices",
 ] as const;
 
 const HEADER = CSV_COLUMNS.join(",");
@@ -44,6 +45,7 @@ export function exportCsv(deck: Deck): string {
 			card.difficulty !== undefined ? String(card.difficulty) : "",
 			card.source ? csvQuote(card.source) : "",
 			card.reversible === true ? "true" : "",
+			card.choices ? csvQuote(card.choices.join(" | ")) : "",
 		];
 		rows.push(fields.join(","));
 	}
@@ -176,6 +178,7 @@ export function importCsv(csvText: string): Card[] {
 		const difficultyStr = row[5] ?? "";
 		const source = row[6] ?? "";
 		const reversibleStr = row[7] ?? "";
+		const choicesStr = row[8] ?? "";
 
 		// Parse tags
 		const tags: string[] = [];
@@ -190,7 +193,13 @@ export function importCsv(csvText: string): Card[] {
 
 		// Parse type
 		let type: CardType = "qa";
-		if (typeStr === "cloze" || typeStr === "code-output" || typeStr === "qa") {
+		if (
+			typeStr === "cloze" ||
+			typeStr === "code-output" ||
+			typeStr === "qa" ||
+			typeStr === "mcq" ||
+			typeStr === "true-false"
+		) {
 			type = typeStr;
 		}
 
@@ -219,6 +228,14 @@ export function importCsv(csvText: string): Card[] {
 
 		if (reversibleStr === "true") {
 			card.reversible = true;
+		}
+
+		if (choicesStr) {
+			const sep = choicesStr.includes("|") ? "|" : ",";
+			card.choices = choicesStr
+				.split(sep)
+				.map((c) => c.trim())
+				.filter(Boolean);
 		}
 
 		cards.push(card);

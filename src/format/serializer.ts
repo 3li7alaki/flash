@@ -12,8 +12,16 @@ export function serializeCard(card: Card): string {
 	lines.push(serializeMultiline("Q:", card.question));
 	lines.push(serializeMultiline("A:", card.answer));
 
-	if (card.type === "code-output") {
-		lines.push("type: code-output");
+	if (
+		card.type === "code-output" ||
+		card.type === "mcq" ||
+		card.type === "true-false"
+	) {
+		lines.push(`type: ${card.type}`);
+	}
+
+	if (card.choices && card.choices.length > 0) {
+		lines.push(`choices: ${card.choices.join(" | ")}`);
 	}
 
 	if (card.tags.length > 0) {

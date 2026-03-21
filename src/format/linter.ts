@@ -10,9 +10,10 @@ const KNOWN_FIELDS = [
 	"difficulty:",
 	"source:",
 	"reversible:",
+	"choices:",
 ];
 
-const VALID_TYPES = ["code-output"];
+const VALID_TYPES = ["code-output", "mcq", "true-false"];
 
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 

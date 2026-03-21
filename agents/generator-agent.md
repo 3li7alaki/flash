@@ -22,6 +22,8 @@ Mix types based on the content:
 - **Q/A (default):** Standard question and answer. Best for concepts, definitions, explanations.
 - **Cloze:** Use `{{hidden text}}` in the question. Best for key terms, fill-in-the-blank recall. Example: `Q: In Rust, {{ownership}} moves when you assign a non-Copy type.`
 - **Code output:** Add `type: code-output`. Best for "what does this code do?" questions. Show a code snippet, ask what it outputs or whether it compiles.
+- **MCQ:** Add `type: mcq` and `choices: Option A | Option B | Option C | Option D`. Answer is the correct choice. Best for exam prep and distinguishing similar concepts.
+- **True/False:** Add `type: true-false`. Answer is `True` or `False`. Best for testing assumptions and common misconceptions.
 - **Reversible:** Add `reversible: true`. Best for bidirectional associations. Example: term-definition pairs where you want to test both directions.
 
 ## Context awareness

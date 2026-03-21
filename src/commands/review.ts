@@ -23,6 +23,7 @@ import { findDeck } from "./utils.ts";
 async function tryCreateGraderModel(
 	config: FcConfig,
 ): Promise<LanguageModel | null> {
+	if (!config.ai.enabled) return null;
 	if (!config.review.aiGrading) return null;
 
 	const apiKey = getApiKey(config);
@@ -222,6 +223,22 @@ export async function reviewCommand(
 
 		prompts.note(displayQuestion, "Question");
 
+		// Show MCQ choices
+		if (card.type === "mcq" && card.choices) {
+			const letters = "abcdefghijklmnopqrstuvwxyz";
+			for (let ci = 0; ci < card.choices.length; ci++) {
+				console.log(`  ${letters[ci]}) ${card.choices[ci]}`);
+			}
+			console.log();
+		}
+
+		// Show true/false options
+		if (card.type === "true-false") {
+			console.log("  a) True");
+			console.log("  b) False");
+			console.log();
+		}
+
 		// Show hint if enabled and available
 		if (config.review.showHints && card.hint) {
 			console.log(`Hint: ${card.hint}`);
@@ -237,10 +254,17 @@ export async function reviewCommand(
 		}
 
 		// Collect user answer
+		let answerPromptMsg = useAiGrading
+			? "Your answer:"
+			: "Your answer (press Enter to reveal):";
+		if (card.type === "mcq") {
+			answerPromptMsg = "Your answer (letter):";
+		} else if (card.type === "true-false") {
+			answerPromptMsg = "True or false? (a/b):";
+		}
+
 		const userAnswer = await prompts.text({
-			message: useAiGrading
-				? "Your answer:"
-				: "Your answer (press Enter to reveal):",
+			message: answerPromptMsg,
 			defaultValue: "",
 		});
 
@@ -250,10 +274,61 @@ export async function reviewCommand(
 			return;
 		}
 
-		// AI grading path
+		// Grading path — instant for MCQ/true-false, AI for open-ended
 		let suggestedRating: Rating | null = null;
 
-		if (useAiGrading && userAnswer && userAnswer.trim() !== "") {
+		if (
+			(card.type === "mcq" || card.type === "true-false") &&
+			userAnswer &&
+			userAnswer.trim() !== ""
+		) {
+			// Instant grading — no AI needed
+			const normalizedUser = userAnswer.trim().toLowerCase();
+			const normalizedCorrect = correctAnswer.trim().toLowerCase();
+
+			let isCorrect = normalizedUser === normalizedCorrect;
+
+			// MCQ: match letter to choice
+			if (card.type === "mcq" && card.choices) {
+				const letters = "abcdefghijklmnopqrstuvwxyz";
+				const letterIdx = letters.indexOf(normalizedUser);
+				if (letterIdx >= 0 && letterIdx < card.choices.length) {
+					isCorrect =
+						card.choices[letterIdx]?.toLowerCase() === normalizedCorrect;
+				}
+				// Also accept if user typed the correct letter directly
+				if (!isCorrect) {
+					const correctIdx = card.choices.findIndex(
+						(c) => c.toLowerCase() === normalizedCorrect,
+					);
+					isCorrect =
+						normalizedUser === letters[correctIdx] ||
+						normalizedUser === normalizedCorrect;
+				}
+			}
+
+			// True-false: normalize various inputs
+			if (card.type === "true-false") {
+				const tfMap: Record<string, string> = {
+					true: "true",
+					t: "true",
+					a: "true",
+					false: "false",
+					f: "false",
+					b: "false",
+				};
+				const mapped = tfMap[normalizedUser];
+				isCorrect = mapped === normalizedCorrect;
+			}
+
+			if (isCorrect) {
+				console.log("  Correct!");
+				suggestedRating = "good";
+			} else {
+				console.log("  Incorrect.");
+				suggestedRating = "again";
+			}
+		} else if (useAiGrading && userAnswer && userAnswer.trim() !== "") {
 			const result = await gradeAnswer(
 				graderModel,
 				card.question,
@@ -269,7 +344,22 @@ export async function reviewCommand(
 		}
 
 		// Reveal the answer
-		prompts.note(correctAnswer, "Answer");
+		if (card.type === "mcq" && card.choices) {
+			const letters = "abcdefghijklmnopqrstuvwxyz";
+			const correctIdx = card.choices.findIndex(
+				(c) => c.toLowerCase() === correctAnswer.trim().toLowerCase(),
+			);
+			if (correctIdx >= 0) {
+				prompts.note(
+					`${letters[correctIdx]}) ${card.choices[correctIdx]}`,
+					"Answer",
+				);
+			} else {
+				prompts.note(correctAnswer, "Answer");
+			}
+		} else {
+			prompts.note(correctAnswer, "Answer");
+		}
 
 		// Rating selection — pre-select AI suggestion if available
 		const ratingOptions = [

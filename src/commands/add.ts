@@ -15,7 +15,7 @@ export async function addCommand(
 	if (!deckNameOrPath) {
 		console.error("Usage: flash add <deck>");
 		console.error(
-			"  Headless: flash add <deck> --question '...' --answer '...' [--tags '...'] [--hint '...'] [--type qa|code-output] [--reversible]",
+			"  Headless: flash add <deck> --question '...' --answer '...' [--tags '...'] [--hint '...'] [--type qa|code-output|mcq|true-false] [--choices 'a|b|c|d'] [--reversible]",
 		);
 		process.exitCode = 1;
 		return;
@@ -107,6 +107,8 @@ export async function addCommand(
 			options: [
 				{ value: "qa", label: "Q/A" },
 				{ value: "code-output", label: "Code Output" },
+				{ value: "mcq", label: "Multiple Choice" },
+				{ value: "true-false", label: "True/False" },
 			],
 		});
 		if (prompts.isCancel(typeSelect)) {
@@ -146,6 +148,18 @@ export async function addCommand(
 		}
 	}
 
+	// Parse choices for mcq
+	let choices: string[] | undefined;
+	const choicesFlag =
+		typeof flags.choices === "string" ? flags.choices : undefined;
+	if (choicesFlag) {
+		const sep = choicesFlag.includes("|") ? "|" : ",";
+		choices = choicesFlag
+			.split(sep)
+			.map((c) => c.trim())
+			.filter(Boolean);
+	}
+
 	const card: Card = {
 		id: generateCardId(questionStr),
 		question: questionStr,
@@ -153,6 +167,10 @@ export async function addCommand(
 		type: cardType,
 		tags,
 	};
+
+	if (choices && choices.length > 0) {
+		card.choices = choices;
+	}
 
 	if (hintStr) {
 		card.hint = hintStr;

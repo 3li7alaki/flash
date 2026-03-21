@@ -91,13 +91,50 @@ case ":$PATH:" in
     ;;
 esac
 
-# ─── Step 5: Create default config ────────────────────────────────────────────
+# ─── Step 5: Claude Code plugin (optional) ────────────────────────────────
+
+PLUGIN_NAME="flash"
+MARKETPLACE_DIR="$HOME/.claude/plugins/marketplaces/flash"
+CACHE_DIR="$HOME/.claude/plugins/cache/flash"
+
+if command -v claude &>/dev/null; then
+  echo "  Claude CLI detected — installing plugin..."
+
+  # Add marketplace (idempotent)
+  if [ ! -d "$MARKETPLACE_DIR" ]; then
+    claude plugin marketplace add "$REPO" 2>/dev/null || true
+  fi
+
+  # Pull latest in marketplace
+  if [ -d "$MARKETPLACE_DIR/.git" ]; then
+    git -C "$MARKETPLACE_DIR" fetch origin main -q 2>/dev/null || true
+    git -C "$MARKETPLACE_DIR" clean -fd -q 2>/dev/null || true
+    git -C "$MARKETPLACE_DIR" reset --hard origin/main -q 2>/dev/null || true
+  fi
+
+  # Install marketplace deps
+  if [ -f "$MARKETPLACE_DIR/package.json" ]; then
+    (cd "$MARKETPLACE_DIR" && bun install --frozen-lockfile 2>/dev/null || bun install 2>/dev/null) || true
+  fi
+
+  # Clear cache + reinstall
+  rm -rf "$CACHE_DIR" 2>/dev/null || true
+  claude plugin install "${PLUGIN_NAME}@${PLUGIN_NAME}" 2>/dev/null || true
+  echo "  ✓ Claude Code plugin installed"
+else
+  echo "  Claude CLI not found — skipping plugin install."
+  echo "  The flash CLI works standalone. Install Claude Code later for /flash commands:"
+  echo "    https://docs.anthropic.com/en/docs/claude-code"
+fi
+
+# ─── Step 6: Create default config ────────────────────────────────────────────
 
 if [ ! -f "$CONFIG_DIR/config.json" ]; then
   mkdir -p "$CONFIG_DIR"
   cat > "$CONFIG_DIR/config.json" << 'CONF'
 {
   "ai": {
+    "enabled": true,
     "provider": "openrouter",
     "apiKey": "",
     "model": "deepseek/deepseek-chat-v3-0324"

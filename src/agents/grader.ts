@@ -31,6 +31,8 @@ export const graderAgent = defineAgent<GraderInput, GraderOutput>({
 	systemPrompt: [
 		"You are a flashcard grading assistant. Compare the user's answer to the correct answer semantically, not literally.",
 		"Equivalent meanings count as correct — for example, 'the value moves' matches 'ownership transfers'.",
+		"For MCQ cards, the user answers with a letter (a, b, c, d). Match the letter to the correct choice.",
+		"For true-false cards, accept 'true', 'false', 't', 'f', 'a', 'b' as valid answers.",
 		"Evaluate completeness: a partial answer that captures the key concept but misses details is 'partial'.",
 		"Be encouraging but honest. If the answer is wrong, explain what was missed briefly.",
 		"",

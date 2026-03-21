@@ -2,7 +2,7 @@ import { createHash } from "node:crypto";
 
 // --- Card types ---
 
-export type CardType = "qa" | "cloze" | "code-output";
+export type CardType = "qa" | "cloze" | "code-output" | "mcq" | "true-false";
 
 export interface Card {
 	id: string;
@@ -14,6 +14,7 @@ export interface Card {
 	difficulty?: number;
 	source?: string;
 	reversible?: boolean;
+	choices?: string[];
 }
 
 // --- Deck types ---
@@ -54,6 +55,7 @@ export interface DeckState {
 
 export interface FcConfig {
 	ai: {
+		enabled: boolean;
 		provider: string;
 		apiKey: string;
 		model: string;

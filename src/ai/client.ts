@@ -35,9 +35,15 @@ export async function createModelForTier(
 	const config = await loadConfig(configPath);
 	const apiKey = getApiKey(config);
 
+	if (!config.ai.enabled) {
+		throw new Error(
+			"AI is disabled. Run 'flash config set ai.enabled true' to enable.",
+		);
+	}
+
 	if (!apiKey) {
 		throw new Error(
-			"No API key. Run 'flash config set ai.apiKey <key>' or set FLASH_API_KEY",
+			"No API key. Run 'flash config setup --key <key>' or set FLASH_API_KEY",
 		);
 	}
 

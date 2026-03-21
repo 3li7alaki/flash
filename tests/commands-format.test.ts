@@ -168,7 +168,7 @@ describe("fc export", () => {
 		const { stdout, exitCode } = await runCli(env.configDir, "export", "test");
 		expect(exitCode).toBe(0);
 		expect(stdout).toContain(
-			"question,answer,tags,type,hint,difficulty,source,reversible",
+			"question,answer,tags,type,hint,difficulty,source,reversible,choices",
 		);
 		expect(stdout).toContain("What is Rust?");
 		expect(stdout).toContain("A systems programming language.");
@@ -202,7 +202,7 @@ describe("fc import", () => {
 		env.cleanup();
 	});
 
-	const CSV_CONTENT = `question,answer,tags,type,hint,difficulty,source,reversible
+	const CSV_CONTENT = `question,answer,tags,type,hint,difficulty,source,reversible,choices
 What is Go?,A language by Google.,"go, programming",qa,,,,
 What is Rust?,A systems language.,"rust, systems",qa,,,,
 `;

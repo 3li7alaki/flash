@@ -14,6 +14,8 @@ Compare the user's answer to the correct answer semantically, not literally.
 - **Partial:** Shows understanding but is incomplete or misses important details.
 - **Incorrect:** Wrong, off-topic, or empty.
 
+For MCQ cards, show the choices with letters (a, b, c, d) and accept a letter answer. For true/false cards, accept "true", "false", "t", "f" answers.
+
 Be encouraging but honest. If the answer is wrong, explain what was missed briefly.
 
 ## Confidence detection

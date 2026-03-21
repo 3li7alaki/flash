@@ -26,7 +26,7 @@ describe("exportCsv", () => {
 	test("exports header row", () => {
 		const csv = exportCsv(makeDeck([]));
 		expect(csv).toBe(
-			"question,answer,tags,type,hint,difficulty,source,reversible\n",
+			"question,answer,tags,type,hint,difficulty,source,reversible,choices\n",
 		);
 	});
 
@@ -41,7 +41,7 @@ describe("exportCsv", () => {
 		const lines = csv.split("\n");
 		expect(lines).toHaveLength(3); // header + 1 card + trailing empty
 		expect(lines[1]).toBe(
-			"What is a closure?,A function that captures its environment.,,qa,,,,",
+			"What is a closure?,A function that captures its environment.,,qa,,,,,",
 		);
 	});
 
@@ -95,7 +95,7 @@ describe("exportCsv", () => {
 		const csv = exportCsv(deck);
 		const lines = csv.split("\n").filter(Boolean);
 		expect(lines[1]).toBe(
-			'Q,A,"tag1, tag2",code-output,Think carefully,3,https://example.com,true',
+			'Q,A,"tag1, tag2",code-output,Think carefully,3,https://example.com,true,',
 		);
 	});
 
@@ -124,7 +124,7 @@ describe("exportCsv", () => {
 	test("empty deck exports header only", () => {
 		const csv = exportCsv(makeDeck([]));
 		expect(csv).toBe(
-			"question,answer,tags,type,hint,difficulty,source,reversible\n",
+			"question,answer,tags,type,hint,difficulty,source,reversible,choices\n",
 		);
 	});
 });
@@ -132,7 +132,7 @@ describe("exportCsv", () => {
 describe("importCsv", () => {
 	test("imports basic card from CSV", () => {
 		const csv =
-			"question,answer,tags,type,hint,difficulty,source,reversible\nWhat is X?,It is Y,,qa,,,,\n";
+			"question,answer,tags,type,hint,difficulty,source,reversible,choices\nWhat is X?,It is Y,,qa,,,,\n";
 		const cards = importCsv(csv);
 		expect(cards).toHaveLength(1);
 		expect(cards[0]?.question).toBe("What is X?");
@@ -143,7 +143,7 @@ describe("importCsv", () => {
 
 	test("imports with missing optional fields", () => {
 		const csv =
-			"question,answer,tags,type,hint,difficulty,source,reversible\nQ,A,,qa,,,,\n";
+			"question,answer,tags,type,hint,difficulty,source,reversible,choices\nQ,A,,qa,,,,\n";
 		const cards = importCsv(csv);
 		expect(cards).toHaveLength(1);
 		expect(cards[0]?.hint).toBeUndefined();
@@ -154,7 +154,7 @@ describe("importCsv", () => {
 
 	test("imports all optional fields", () => {
 		const csv =
-			'question,answer,tags,type,hint,difficulty,source,reversible\nQ,A,"tag1, tag2",code-output,Hint,3,https://ex.com,true\n';
+			'question,answer,tags,type,hint,difficulty,source,reversible,choices\nQ,A,"tag1, tag2",code-output,Hint,3,https://ex.com,true\n';
 		const cards = importCsv(csv);
 		expect(cards).toHaveLength(1);
 		expect(cards[0]?.tags).toEqual(["tag1", "tag2"]);
@@ -166,21 +166,22 @@ describe("importCsv", () => {
 	});
 
 	test("handles header row correctly", () => {
-		const csv = "question,answer,tags,type,hint,difficulty,source,reversible\n";
+		const csv =
+			"question,answer,tags,type,hint,difficulty,source,reversible,choices\n";
 		const cards = importCsv(csv);
 		expect(cards).toHaveLength(0);
 	});
 
 	test("imports quoted fields with commas", () => {
 		const csv =
-			'question,answer,tags,type,hint,difficulty,source,reversible\n"What are a, b?",Answer,,qa,,,,\n';
+			'question,answer,tags,type,hint,difficulty,source,reversible,choices\n"What are a, b?",Answer,,qa,,,,\n';
 		const cards = importCsv(csv);
 		expect(cards[0]?.question).toBe("What are a, b?");
 	});
 
 	test("imports quoted fields with newlines", () => {
 		const csv =
-			'question,answer,tags,type,hint,difficulty,source,reversible\n"Line 1\nLine 2","A1\nA2",,qa,,,,\n';
+			'question,answer,tags,type,hint,difficulty,source,reversible,choices\n"Line 1\nLine 2","A1\nA2",,qa,,,,\n';
 		const cards = importCsv(csv);
 		expect(cards[0]?.question).toBe("Line 1\nLine 2");
 		expect(cards[0]?.answer).toBe("A1\nA2");
@@ -188,13 +189,14 @@ describe("importCsv", () => {
 
 	test("imports escaped quotes in fields", () => {
 		const csv =
-			'question,answer,tags,type,hint,difficulty,source,reversible\n"He said ""hello""",Greeting,,qa,,,,\n';
+			'question,answer,tags,type,hint,difficulty,source,reversible,choices\n"He said ""hello""",Greeting,,qa,,,,\n';
 		const cards = importCsv(csv);
 		expect(cards[0]?.question).toBe('He said "hello"');
 	});
 
 	test("empty CSV returns no cards", () => {
-		const csv = "question,answer,tags,type,hint,difficulty,source,reversible\n";
+		const csv =
+			"question,answer,tags,type,hint,difficulty,source,reversible,choices\n";
 		const cards = importCsv(csv);
 		expect(cards).toHaveLength(0);
 	});

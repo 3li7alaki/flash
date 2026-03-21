@@ -27,6 +27,7 @@ export const challengerAgent = defineAgent<ChallengerInput, string>({
 		"Your job:",
 		"- Create harder variants that test deeper understanding of the same concepts.",
 		"- Use techniques: combine concepts, ask for edge cases, require application not just recall.",
+		"- Mix formats: standard Q/A, MCQ (type: mcq with choices: field), true-false (type: true-false), cloze ({{answer}}).",
 		"- Output cards in .fc format with --- separators, Q: and A: fields, and tags.",
 		"- Generate 1-2 harder cards per mastered card.",
 		"- Each card should be self-contained and clearly worded.",

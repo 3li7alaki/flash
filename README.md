@@ -52,9 +52,20 @@ Q: What does this code print?
 A: It doesn't compile. Ownership moved to y, so x is invalidated.
 type: code-output
 tags: ownership
+---
+Q: How many tools should an agent ideally have?
+A: b
+type: mcq
+choices: 1-2 | 4-5 | 10-15 | As many as needed
+tags: agent-design
+---
+Q: LLMs can reliably self-report their confidence levels.
+A: False
+type: true-false
+tags: reliability
 ```
 
-**Card types:** Q/A, cloze deletions (`{{answer}}`), code-output, reversible (auto-generates A→Q)
+**Card types:** Q/A, cloze deletions (`{{answer}}`), code-output, multiple choice (`mcq` with `choices:`), true/false, reversible (auto-generates A→Q)
 
 **Your data, your files.** `.fc` files are plain text — diff them, version them, share them via git. Review state lives in separate `.fc.state` JSON files so your content stays clean.
 

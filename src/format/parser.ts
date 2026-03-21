@@ -10,6 +10,7 @@ const FIELD_KEYWORDS = [
 	"difficulty:",
 	"source:",
 	"reversible:",
+	"choices:",
 ] as const;
 
 type FieldKey =
@@ -20,7 +21,8 @@ type FieldKey =
 	| "hint"
 	| "difficulty"
 	| "source"
-	| "reversible";
+	| "reversible"
+	| "choices";
 
 function matchFieldKeyword(line: string): [FieldKey, string] | null {
 	for (const kw of FIELD_KEYWORDS) {
@@ -105,7 +107,12 @@ export function parseCard(lines: string[]): Card | null {
 		type = "cloze";
 	} else {
 		const typeVal = first(fields.type).trim();
-		if (typeVal === "code-output" || typeVal === "cloze") {
+		if (
+			typeVal === "code-output" ||
+			typeVal === "cloze" ||
+			typeVal === "mcq" ||
+			typeVal === "true-false"
+		) {
 			type = typeVal;
 		}
 	}
@@ -122,6 +129,32 @@ export function parseCard(lines: string[]): Card | null {
 		}
 	}
 
+	// Parse choices (comma-separated or pipe-separated)
+	const choicesRaw = first(fields.choices).trim();
+	let choices: string[] | undefined;
+	if (choicesRaw) {
+		const sep = choicesRaw.includes("|") ? "|" : ",";
+		choices = choicesRaw
+			.split(sep)
+			.map((c) => c.trim())
+			.filter(Boolean);
+	}
+
+	// Auto-detect true-false from answer
+	const answerLower = answer.trim().toLowerCase();
+	if (
+		type === "qa" &&
+		(answerLower === "true" || answerLower === "false") &&
+		!choices
+	) {
+		type = "true-false";
+	}
+
+	// Auto-detect mcq from choices
+	if (type === "qa" && choices && choices.length >= 2) {
+		type = "mcq";
+	}
+
 	const card: Card = {
 		id: generateCardId(question),
 		question,
@@ -129,6 +162,10 @@ export function parseCard(lines: string[]): Card | null {
 		type,
 		tags,
 	};
+
+	if (choices && choices.length > 0) {
+		card.choices = choices;
+	}
 
 	const hintVal = first(fields.hint).trim();
 	if (hintVal) {

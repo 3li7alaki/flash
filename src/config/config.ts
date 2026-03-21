@@ -8,6 +8,7 @@ const CURRENT_VERSION = 1;
 export function getDefaultConfig(): FcConfig {
 	return {
 		ai: {
+			enabled: true,
 			provider: "openrouter",
 			apiKey: "",
 			model: "deepseek/deepseek-chat-v3-0324",

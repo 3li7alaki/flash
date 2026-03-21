@@ -31,6 +31,7 @@ export const teacherAgent = defineAgent<TeacherInput, string>({
 		"When the student says 'done' or wants to stop:",
 		"- Summarize the gaps you identified.",
 		"- Generate flashcards in .fc format for the weak areas.",
+		"- Mix card types: Q/A, MCQ (type: mcq with choices: a | b | c | d), true-false (type: true-false), and cloze ({{answer}}).",
 		"- Format cards between --- separators with Q: and A: fields.",
 		"- Include relevant tags for each card.",
 	].join("\n"),
