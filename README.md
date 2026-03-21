@@ -180,7 +180,16 @@ fc stats [deck]                     # Learning stats and weak areas
 fc daily                            # Dashboard: due cards, weak spots, study plan
 fc search <query>                   # Search across all decks
 fc merge <deck1> <deck2>            # Merge two decks
+fc lint [deck]                      # Validate .fc files, report errors
+fc fix [deck]                       # Auto-fix format issues
 fc config                           # Manage settings
+```
+
+### Import/Export
+
+```bash
+fc export <deck> --format csv       # Export deck to CSV
+fc import <file.csv> [deck]         # Import cards from CSV
 ```
 
 ### AI-Powered

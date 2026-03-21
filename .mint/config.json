@@ -1,34 +1,38 @@
 {
-  "stack": "typescript",
-  "packageManager": "bun",
-  "gates": {
-    "lint": "",
-    "types": "",
-    "tests": ""
-  },
-  "reviewers": {
-    "spec": true,
-    "quality": true,
-    "security": true,
-    "conventions": true,
-    "tests": true,
-    "business": true,
-    "performance": false
-  },
-  "conventions": {
-    "docs": ["CONTRIBUTING.md", "docs/adr/"]
-  },
-  "business": {
-    "docs": ["PRODUCT.md"]
-  },
-  "definitionOfDone": {
-    "docCheckPassed": true
-  },
-  "isolation": {
-    "plan": "worktree",
-    "ship": "worktree",
-    "quick": "branch"
-  },
-  "documenters": [],
-  "plugins": []
+	"stack": "typescript",
+	"packageManager": "bun",
+	"gates": {
+		"lint": "bun run lint",
+		"types": "bun run types",
+		"tests": "bun test"
+	},
+	"reviewers": {
+		"spec": true,
+		"quality": true,
+		"security": true,
+		"conventions": true,
+		"tests": true,
+		"business": true,
+		"performance": false
+	},
+	"conventions": {
+		"docs": ["CONTRIBUTING.md", "docs/adr/"]
+	},
+	"business": {
+		"docs": ["PRODUCT.md"]
+	},
+	"tdd": {
+		"default": true,
+		"coverageThreshold": 80
+	},
+	"definitionOfDone": {
+		"docCheckPassed": true
+	},
+	"isolation": {
+		"plan": "worktree",
+		"ship": "worktree",
+		"quick": "branch"
+	},
+	"documenters": [],
+	"plugins": []
 }

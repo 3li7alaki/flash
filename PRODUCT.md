@@ -38,7 +38,8 @@ Architectural decisions are tracked in `docs/adr/`. Key decisions:
 ### Design Goals
 
 - **Human-writable** — create cards in any text editor without reading docs
-- **Machine-parseable** — unambiguous, efficient for AI to generate and parse
+- **Machine-parseable** — unambiguous, deterministic, efficient for AI to generate and parse
+- **CSV-roundtrippable** — `.fc` ↔ CSV conversion must be lossless; if it round-trips cleanly, the format has no ambiguity
 - **Git-friendly** — clean diffs, mergeable, no binary content
 - **Minimal** — only the fields that matter, no boilerplate
 - **Text-only** — no images, no binary attachments
@@ -46,66 +47,63 @@ Architectural decisions are tracked in `docs/adr/`. Key decisions:
 ### Deck Structure
 
 ```
-@deck <name>
-@tags <comma-separated tags>
-@created <YYYY-MM-DD>
-@template <template name>          # optional
+@deck Rust Ownership
+@tags rust, systems-programming
+@created 2026-03-21
 
 ---
-<card>
----
-<card>
----
-```
-
-- `@` prefix for deck-level metadata
-- `---` separates cards
-- Deck metadata is optional except `@deck`
-
-### Card Types
-
-**Standard Q/A** — default type, no `type:` field needed
-```
 Q: What happens when you assign a variable to another in Rust?
-A: Ownership moves (for non-Copy types). The original variable is invalidated.
+A: Ownership moves (for non-Copy types). The original variable
+   is invalidated and can no longer be used.
 tags: ownership, move-semantics
-hint: Think about the difference between Copy and non-Copy types
-```
-
-**Cloze deletion** — fill-in-the-blank, hidden text in `{{}}`
-```
-Q: Rust ensures memory safety at compile time through the {{borrow checker}}.
-type: cloze
+---
+Q: Rust ensures memory safety through the {{borrow checker}}.
 tags: compiler, safety
-```
-
-**Code output** — "what does this code do/print?"
-```
+---
 Q: What does this code print?
-  let x = vec![1, 2, 3];
-  let y = x;
-  println!("{:?}", x);
-A: It doesn't compile. Ownership moved to y, so x is invalidated.
+   let x = vec![1, 2, 3];
+   let y = x;
+   println!("{:?}", x);
+A: Doesn't compile. Ownership moved to y, x is invalidated.
 type: code-output
 tags: ownership
-```
-
-**Reversible** — auto-generates A→Q direction for bidirectional recall
-```
+hint: Think about move semantics
+---
 Q: What's the difference between &T and &mut T?
 A: &T is a shared (immutable) borrow. &mut T is an exclusive (mutable) borrow.
 tags: borrowing
 reversible: true
+---
 ```
+
+### Deck Metadata
+
+- `@deck` — deck name (optional — defaults to filename without `.fc` extension)
+- `@tags` — deck-wide tags (comma-separated)
+- `@created` — creation date (YYYY-MM-DD)
+- `@template` — template used to create this deck (if any)
+
+All metadata is optional. A file with just cards and `---` separators is valid.
+
+### Card Types
+
+| Type | Detection | Description |
+|------|-----------|-------------|
+| **Q/A** | Default (no `type:` needed) | Standard question and answer |
+| **Cloze** | Auto-detected from `{{}}` in question | Fill-in-the-blank — hidden text is the answer |
+| **Code Output** | `type: code-output` | "What does this code do/print?" |
+| **Reversible** | `reversible: true` | Auto-generates A→Q direction for bidirectional recall |
+
+Cloze is auto-detected — if the question contains `{{text}}`, it's a cloze card. No `type: cloze` needed. `type: code-output` is explicit because there's no syntax signal to auto-detect it.
 
 ### Card Fields
 
 | Field | Required | Description |
 |-------|----------|-------------|
-| `Q:` | yes | Question (multiline supported) |
-| `A:` | yes (except cloze) | Answer (multiline supported) |
+| `Q:` | yes | Question (multiline — continue with indented lines) |
+| `A:` | yes (except cloze) | Answer (multiline — continue with indented lines) |
 | `tags:` | no | Comma-separated per-card tags |
-| `type:` | no | `cloze`, `code-output` (default: standard Q/A) |
+| `type:` | no | `code-output` (Q/A is default, cloze is auto-detected) |
 | `hint:` | no | Shown before revealing answer |
 | `difficulty:` | no | Manual difficulty override (1-5) |
 | `source:` | no | Origin — url, book title, `ai-generated`, etc. |
@@ -113,13 +111,46 @@ reversible: true
 
 ### Parsing Rules
 
-1. Lines starting with `@` before the first `---` are deck metadata
-2. `---` on its own line separates cards
-3. `Q:` starts the question (continues until `A:`, `type:`, `tags:`, `hint:`, `difficulty:`, `source:`, `reversible:`, or `---`)
-4. `A:` starts the answer (continues until a field keyword or `---`)
-5. Multiline: any indented line continues the previous `Q:` or `A:` block
-6. Blank lines within Q/A blocks are preserved
-7. Card IDs are generated from a deterministic hash of the question content
+These rules are strict and unambiguous — they enable deterministic parsing and lossless CSV round-tripping.
+
+1. **Deck metadata:** Lines starting with `@` before the first `---` are deck metadata. Format: `@key value`
+2. **Card separator:** `---` alone on a line (no other content) separates cards
+3. **Field keywords:** `Q:`, `A:`, `tags:`, `type:`, `hint:`, `difficulty:`, `source:`, `reversible:` are recognized **only at the start of a line** (column 0). This means answer text can contain "tags:" or "hint:" mid-sentence without ambiguity.
+4. **Multiline content:** Any line starting with whitespace (space or tab) continues the previous `Q:` or `A:` block. Blank lines within Q/A blocks are preserved.
+5. **Field order:** Any order within a card is valid. Parser handles all permutations.
+6. **Empty cards:** Cards with no `Q:` field are skipped silently by the parser but reported by the linter.
+7. **Cloze auto-detection:** If `Q:` contains `{{text}}`, the card type is `cloze` regardless of `type:` field.
+8. **Card IDs:** Generated from a deterministic hash of the normalized question text (trimmed, collapsed whitespace, lowercased). Stable across reformatting.
+
+### CSV Mapping
+
+The `.fc` format maps cleanly to flat CSV rows. This is a design constraint — if a card can't be represented as a single CSV row, the format is too complex.
+
+| `.fc` field | CSV column | Notes |
+|-------------|------------|-------|
+| `Q:` (multiline joined) | `question` | Newlines preserved as `\n` in quoted CSV |
+| `A:` (multiline joined) | `answer` | Newlines preserved as `\n` in quoted CSV |
+| `tags:` | `tags` | Comma-separated string |
+| `type:` or auto-detected | `type` | `qa`, `cloze`, `code-output` |
+| `hint:` | `hint` | |
+| `difficulty:` | `difficulty` | 1-5 or empty |
+| `source:` | `source` | |
+| `reversible:` | `reversible` | `true` or empty |
+
+Deck metadata is not included in CSV (it's per-file, not per-card). When importing CSV, deck metadata comes from the target file or command flags.
+
+### Format Tooling
+
+| Tool | What it does |
+|------|-------------|
+| **Parser** | `.fc` → structured card objects. Strict. Reports errors with line numbers. |
+| **Serializer** | Card objects → `.fc` text. Deterministic output (stable diffs). |
+| **Linter** | Validates `.fc` files: missing Q/A, orphaned fields, bad cloze syntax, duplicate cards, invalid field values. Reports warnings and errors with line numbers. |
+| **Fixer** | Auto-fixes common issues: normalize whitespace, sort tags, fix indentation, remove empty cards. |
+| **CSV import** | CSV → card objects → `.fc` file |
+| **CSV export** | `.fc` → card objects → CSV |
+
+**Round-trip invariant:** `.fc` → CSV → `.fc` must produce identical output. This is tested automatically and guarantees format correctness.
 
 ### Review State
 
@@ -142,7 +173,7 @@ Stored in `.fc.state` JSON files alongside deck files. Content and state are alw
 }
 ```
 
-State migration: if a question is edited, a new ID is generated. The scheduler detects orphaned IDs and migrates state based on fuzzy matching.
+**Card ID migration:** When a question is edited, a new ID is generated. The scheduler attempts to migrate state: exact match first, then Levenshtein distance < 30% of question length. If no match, the card starts fresh. Orphaned state entries are pruned on next review.
 
 ---
 
@@ -307,9 +338,12 @@ API key can also be set via `FC_API_KEY` environment variable (takes precedence 
 src/
   ├── cli.ts               # Entry point, command routing
   ├── commands/             # Command handlers
-  ├── format/               # .fc parser and serializer
-  │   ├── parser.ts
-  │   └── serializer.ts
+  ├── format/               # .fc parser, serializer, linter, fixer, CSV
+  │   ├── parser.ts         # .fc → card objects
+  │   ├── serializer.ts     # card objects → .fc text
+  │   ├── linter.ts         # validate .fc files
+  │   ├── fixer.ts          # auto-fix format issues
+  │   └── csv.ts            # CSV import/export
   ├── agents/               # Agent definitions (prompts + schemas)
   │   ├── grader.ts
   │   ├── generator.ts
@@ -384,13 +418,16 @@ This means users never face broken configs after updating.
 ### Phase 1 — Core CLI (offline, no AI)
 Everything needed to create, review, and manage flashcards without an API key.
 
-- `.fc` format parser/serializer (all card types)
+- `.fc` format parser/serializer (all card types: Q/A, cloze, code-output, reversible)
+- Format tooling: linter (`fc lint`), fixer (`fc fix`), CSV import/export
+- Round-trip test: `.fc` → CSV → `.fc` produces identical output
 - Deck management: `fc new`, `fc add`, `fc edit`, `fc list`, `fc search`, `fc merge`
 - Review engine with FSRS-5 scheduling, tag filtering, interleaved mode
 - Self-grading during review (again/hard/good/easy)
 - Stats and daily dashboard
-- Config system
+- Config system with migration support
 - Deck templates
+- CLI maintenance: `fc version`, `fc update`, `fc doctor`
 - Install script (one-liner, bootstraps Bun)
 
 ### Phase 2 — AI Integration
