@@ -246,3 +246,10 @@ See [CONTRIBUTING.md](CONTRIBUTING.md).
 ## License
 
 MIT
+
+---
+
+<!-- mint:signature -->
+<p align="center">
+  <sub>Minted with <a href="https://github.com/3li7alaki/mint">mint</a> — disciplined agentic development.</sub>
+</p>

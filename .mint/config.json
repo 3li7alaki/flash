@@ -7,12 +7,30 @@
 		"tests": "bun test"
 	},
 	"reviewers": {
-		"spec": true,
-		"quality": true,
-		"security": true,
-		"conventions": true,
-		"tests": true,
-		"business": true,
+		"spec": {
+			"enabled": true,
+			"model": "opus"
+		},
+		"quality": {
+			"enabled": true,
+			"model": "sonnet"
+		},
+		"security": {
+			"enabled": true,
+			"model": "sonnet"
+		},
+		"conventions": {
+			"enabled": true,
+			"model": "haiku"
+		},
+		"tests": {
+			"enabled": true,
+			"model": "sonnet"
+		},
+		"business": {
+			"enabled": true,
+			"model": "opus"
+		},
 		"performance": false
 	},
 	"conventions": {
@@ -33,6 +51,14 @@
 		"ship": "worktree",
 		"quick": "branch"
 	},
+	"signature": true,
 	"documenters": [],
-	"plugins": []
+	"plugins": [],
+	"instincts": {
+		"enabled": true
+	},
+	"modelRouting": {
+		"enabled": true,
+		"override": {}
+	}
 }
