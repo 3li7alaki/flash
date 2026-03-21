@@ -2,7 +2,11 @@ import { readdirSync } from "node:fs";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import * as prompts from "@clack/prompts";
-import { loadConfig, resolveDecksDir } from "../config/config.ts";
+import type { LanguageModel } from "ai";
+import type { GraderOutput } from "../agents/grader.ts";
+import { graderAgent } from "../agents/grader.ts";
+import { createModelForTier } from "../ai/client.ts";
+import { getApiKey, loadConfig, resolveDecksDir } from "../config/config.ts";
 import { parseDeck } from "../format/parser.ts";
 import {
 	getNextCard,
@@ -12,8 +16,51 @@ import {
 } from "../review/engine.ts";
 import { getDueCards } from "../scheduler/scheduler.ts";
 import { loadState, saveState } from "../state/state.ts";
-import type { Card, Deck, DeckState, Rating } from "../types.ts";
+import type { Card, Deck, DeckState, FcConfig, Rating } from "../types.ts";
 import { findDeck } from "./utils.ts";
+
+/** Try to create the AI model for grading. Returns null if unavailable. */
+async function tryCreateGraderModel(
+	config: FcConfig,
+): Promise<LanguageModel | null> {
+	if (!config.review.aiGrading) return null;
+
+	const apiKey = getApiKey(config);
+	if (!apiKey) return null;
+
+	try {
+		return await createModelForTier("fast");
+	} catch {
+		return null;
+	}
+}
+
+/** Grade a user's answer using the AI grader agent. Returns null on failure. */
+async function gradeAnswer(
+	model: LanguageModel,
+	question: string,
+	correctAnswer: string,
+	userAnswer: string,
+): Promise<GraderOutput | null> {
+	try {
+		return await graderAgent.run(model, {
+			question,
+			correctAnswer,
+			userAnswer,
+		});
+	} catch (err) {
+		prompts.log.warn(
+			`AI grading failed: ${(err as Error).message}. Falling back to self-grading.`,
+		);
+		return null;
+	}
+}
+
+const VERDICT_LABELS: Record<string, string> = {
+	correct: "Correct",
+	partial: "Partial",
+	incorrect: "Incorrect",
+};
 
 /** Format a cloze question for display: replace {{...}} with [...] */
 function formatCloze(question: string): string {
@@ -154,6 +201,10 @@ export async function reviewCommand(
 			? config.review.cardsPerSession
 			: undefined;
 
+	// Try to set up AI grading
+	const graderModel = await tryCreateGraderModel(config);
+	const useAiGrading = graderModel !== null;
+
 	let session = startSession(dueCards, state, { maxCards });
 	const totalCards = session.cards.length;
 
@@ -176,40 +227,66 @@ export async function reviewCommand(
 			console.log(`Hint: ${card.hint}`);
 		}
 
-		// Wait for user to attempt an answer (press enter to skip in self-grade mode)
+		// Get the correct answer for display/grading
+		let correctAnswer = card.answer;
+		if (card.type === "cloze") {
+			const match = card.question.match(/\{\{(.+?)\}\}/);
+			if (match?.[1]) {
+				correctAnswer = match[1];
+			}
+		}
+
+		// Collect user answer
 		const userAnswer = await prompts.text({
-			message: "Your answer (press Enter to reveal):",
+			message: useAiGrading
+				? "Your answer:"
+				: "Your answer (press Enter to reveal):",
 			defaultValue: "",
 		});
 
 		if (prompts.isCancel(userAnswer)) {
-			// Save progress on Ctrl+C
 			await saveState(deckPath, session.state);
 			console.log("\nSession interrupted. Progress saved.");
 			return;
 		}
 
-		// Reveal the answer
-		let displayAnswer = card.answer;
-		if (card.type === "cloze") {
-			// For cloze, extract the hidden text as the answer
-			const match = card.question.match(/\{\{(.+?)\}\}/);
-			if (match?.[1]) {
-				displayAnswer = match[1];
+		// AI grading path
+		let suggestedRating: Rating | null = null;
+
+		if (useAiGrading && userAnswer && userAnswer.trim() !== "") {
+			const result = await gradeAnswer(
+				graderModel,
+				card.question,
+				correctAnswer,
+				userAnswer,
+			);
+
+			if (result) {
+				const verdictLabel = VERDICT_LABELS[result.verdict] ?? result.verdict;
+				prompts.note(`${verdictLabel}: ${result.feedback}`, "AI Grading");
+				suggestedRating = result.suggestedRating as Rating;
 			}
 		}
 
-		prompts.note(displayAnswer, "Answer");
+		// Reveal the answer
+		prompts.note(correctAnswer, "Answer");
 
-		// Rating selection
+		// Rating selection — pre-select AI suggestion if available
+		const ratingOptions = [
+			{ value: "again", label: "Again (1) - Forgot completely" },
+			{ value: "hard", label: "Hard (2) - Took a while to recall" },
+			{ value: "good", label: "Good (3) - Recalled with some effort" },
+			{ value: "easy", label: "Easy (4) - Knew it instantly" },
+		];
+
+		const ratingMessage = suggestedRating
+			? `How did you do? (AI suggests: ${suggestedRating})`
+			: "How did you do?";
+
 		const rating = await prompts.select({
-			message: "How did you do?",
-			options: [
-				{ value: "again", label: "Again (1) - Forgot completely" },
-				{ value: "hard", label: "Hard (2) - Took a while to recall" },
-				{ value: "good", label: "Good (3) - Recalled with some effort" },
-				{ value: "easy", label: "Easy (4) - Knew it instantly" },
-			],
+			message: ratingMessage,
+			options: ratingOptions,
+			initialValue: suggestedRating ?? undefined,
 		});
 
 		if (prompts.isCancel(rating)) {
