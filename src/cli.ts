@@ -1,7 +1,8 @@
 #!/usr/bin/env bun
 
-import { version } from "../package.json";
 import { addCommand } from "./commands/add.ts";
+import { configCommand } from "./commands/config.ts";
+import { doctorCommand } from "./commands/doctor.ts";
 import { editCommand } from "./commands/edit.ts";
 import { exportCommand } from "./commands/export.ts";
 import { fixCommand } from "./commands/fix.ts";
@@ -12,6 +13,9 @@ import { mergeCommand } from "./commands/merge.ts";
 import { newCommand } from "./commands/new.ts";
 import { reviewCommand } from "./commands/review.ts";
 import { searchCommand } from "./commands/search.ts";
+import { templatesCommand } from "./commands/templates.ts";
+import { updateCommand } from "./commands/update.ts";
+import { versionCommand } from "./commands/version.ts";
 
 // --- Flag parsing ---
 
@@ -126,10 +130,6 @@ for (const group of Object.values(COMMAND_GROUPS)) {
 }
 
 // Real implementations
-commands.version = async () => {
-	console.log(`fc v${version}`);
-};
-
 commands.new = newCommand;
 commands.add = addCommand;
 commands.edit = editCommand;
@@ -141,6 +141,11 @@ commands.merge = mergeCommand;
 commands.export = exportCommand;
 commands.import = importCommand;
 commands.review = reviewCommand;
+commands.config = configCommand;
+commands.version = versionCommand;
+commands.update = updateCommand;
+commands.doctor = doctorCommand;
+commands.templates = templatesCommand;
 
 // --- Help ---
 
