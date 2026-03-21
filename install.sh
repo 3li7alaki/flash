@@ -1,17 +1,17 @@
 #!/usr/bin/env bash
 # fc installer/updater
-# Install: curl -fsSL https://raw.githubusercontent.com/3li7alaki/fc/main/install.sh | bash
+# Install: curl -fsSL https://raw.githubusercontent.com/3li7alaki/flash/main/install.sh | bash
 # Update:  same command — it's idempotent
 set -euo pipefail
 
-REPO="3li7alaki/fc"
-FC_HOME="$HOME/.fc"
+REPO="3li7alaki/flash"
+FC_HOME="$HOME/.flash"
 LINK_DIR="$HOME/.local/bin"
 CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/fc"
 DECKS_DIR="$HOME/flashcards"
 
 echo ""
-echo "  fc — flashcard CLI with AI superpowers"
+echo "  flash — flashcard CLI with AI superpowers"
 echo ""
 
 # ─── Step 1: Clone or update fc repo ──────────────────────────────────────────
@@ -38,7 +38,7 @@ if ! command -v bun &>/dev/null; then
   echo "  Bun not found — installing (required for fc CLI)..."
   curl -fsSL https://bun.sh/install | bash 2>/dev/null || {
     echo "  ✗ Bun install failed. Install manually: https://bun.sh"
-    echo "    fc CLI requires Bun to run."
+    echo "    flash CLI requires Bun to run."
     exit 1
   }
   # Source bun into current shell
@@ -127,14 +127,14 @@ VERSION=$(grep -o '"version": "[^"]*"' "$FC_HOME/package.json" 2>/dev/null | hea
 
 echo ""
 if [ "$MODE" = "update" ]; then
-  echo "  fc v${VERSION} updated successfully."
+  echo "  flash v${VERSION} updated successfully."
 else
-  echo "  fc v${VERSION} installed successfully."
+  echo "  flash v${VERSION} installed successfully."
 fi
 echo ""
 echo "  Quick start:"
-echo "    fc new \"My First Deck\"     # Create a deck"
-echo "    fc add my-first-deck       # Add cards"
-echo "    fc review                  # Start reviewing"
-echo "    fc config                  # Set up AI (optional)"
+echo "    flash new \"My First Deck\"     # Create a deck"
+echo "    flash add my-first-deck       # Add cards"
+echo "    flash review                  # Start reviewing"
+echo "    flash config                  # Set up AI (optional)"
 echo ""

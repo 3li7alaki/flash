@@ -117,7 +117,7 @@ export async function templatesCommand(
 	}
 
 	console.log("");
-	console.log(`User templates: (~/.config/fc/templates/)`);
+	console.log(`User templates: (~/.config/flash/templates/)`);
 	if (user.length === 0) {
 		console.log("  (none)");
 	} else {

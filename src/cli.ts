@@ -174,8 +174,8 @@ commands.sync = syncCommand;
 // --- Help ---
 
 function printHelp(): void {
-	console.log("fc - Flashcard CLI with AI superpowers\n");
-	console.log(`Usage: fc <command> [args...] [--flags]\n`);
+	console.log("flash - Flashcard CLI with AI superpowers\n");
+	console.log(`Usage: flash <command> [args...] [--flags]\n`);
 
 	for (const [groupName, group] of Object.entries(COMMAND_GROUPS)) {
 		console.log(`${groupName} — ${group.description}`);
@@ -185,7 +185,7 @@ function printHelp(): void {
 		console.log();
 	}
 
-	console.log(`Run fc <command> --help for command-specific help.`);
+	console.log(`Run flash <command> --help for command-specific help.`);
 }
 
 // --- Main ---

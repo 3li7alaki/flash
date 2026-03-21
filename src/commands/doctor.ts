@@ -185,7 +185,7 @@ export async function doctorCommand(
 	results.push(checkBun());
 	results.push(checkGit());
 
-	console.log("fc doctor\n");
+	console.log("flash doctor\n");
 	for (const result of results) {
 		console.log(formatResult(result));
 	}

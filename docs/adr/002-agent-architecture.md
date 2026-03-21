@@ -4,9 +4,9 @@
 Accepted
 
 ## Context
-fc has AI features (generation, grading, analysis) that need to work in two contexts:
-1. CLI — user runs `fc gen`, `fc review`, etc. in the terminal
-2. Claude Code — user runs `/fc gen`, `/fc review` as skills inside their editor
+flash has AI features (generation, grading, analysis) that need to work in two contexts:
+1. CLI — user runs `flash gen`, `flash review`, etc. in the terminal
+2. Claude Code — user runs `/flash gen`, `/flash review` as skills inside their editor
 
 Option A: Build separate implementations for each context.
 Option B: Define agents (role + prompt + schema) once, run them in both contexts.

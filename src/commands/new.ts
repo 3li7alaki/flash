@@ -68,7 +68,7 @@ export async function newCommand(
 
 		if (!templatePath) {
 			console.error(`Error: Template not found: ${templateName}`);
-			console.error('Run "fc templates" to see available templates.');
+			console.error('Run "flash templates" to see available templates.');
 			process.exitCode = 1;
 			return;
 		}

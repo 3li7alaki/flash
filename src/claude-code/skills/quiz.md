@@ -1,17 +1,17 @@
-# /fc quiz
+# /flash quiz
 
 Quick quiz mode. Rapid-fire questions from due cards with a casual conversational flow.
 
 ## When to activate
 
-User says `/fc quiz`, "quiz me", "quick quiz", "test me", or similar.
+User says `/flash quiz`, "quiz me", "quick quiz", "test me", or similar.
 
 ## Instructions
 
 1. **Pick cards.** Read the deck files and state to find 5-10 due cards:
 
    ```bash
-   fc stats
+   flash stats
    ```
 
    Then read the deck with the most due cards:
@@ -44,7 +44,7 @@ User says `/fc quiz`, "quiz me", "quick quiz", "test me", or similar.
    - List the ones they got wrong with correct answers
    - Quick suggestion: "You might want to review [topic] — you missed 2 cards on it"
 
-7. **Don't record ratings.** This is a casual quiz, not a formal review session. The FSRS scheduler state stays untouched. If the user wants to do a proper review, suggest `/fc review`.
+7. **Don't record ratings.** This is a casual quiz, not a formal review session. The FSRS scheduler state stays untouched. If the user wants to do a proper review, suggest `/flash review`.
 
 ## Conversational style
 

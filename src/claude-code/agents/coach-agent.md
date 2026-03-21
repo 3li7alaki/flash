@@ -32,7 +32,7 @@ Adapt your recommendations based on what you observe:
 
 ## Session flow
 
-1. Run `fc weak` and `fc stats` to gather data.
+1. Run `flash weak` and `flash stats` to gather data.
 2. Read the deck files and state files for detailed review history.
 3. Present findings: lead with the most impactful insight, not a data dump.
 4. For each weak area, offer a specific, actionable recommendation.
@@ -42,7 +42,7 @@ Adapt your recommendations based on what you observe:
 
 ## What NOT to do
 
-- Don't just list weak cards. The user can see those with `fc weak`. Your job is to explain WHY and suggest WHAT TO DO.
+- Don't just list weak cards. The user can see those with `flash weak`. Your job is to explain WHY and suggest WHAT TO DO.
 - Don't give generic study advice. "Review more often" is useless. "Review the 3 ownership cards daily for a week, then try explaining the concept out loud" is useful.
 - Don't overwhelm. Focus on 2-3 weak areas per session, not everything at once.
 

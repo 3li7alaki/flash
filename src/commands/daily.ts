@@ -45,7 +45,7 @@ export async function getDailyDashboard(decksDir: string): Promise<string> {
 	weakSpots.sort((a, b) => b.lapses - a.lapses);
 
 	const lines: string[] = [];
-	lines.push("fc \u2014 Daily Dashboard");
+	lines.push("flash \u2014 Daily Dashboard");
 	lines.push("");
 	lines.push(`Due today: ${totalDue} cards across ${decksWithDue} decks`);
 

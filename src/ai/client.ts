@@ -16,7 +16,7 @@ export function createProvider(apiKey: string, modelId: string): LanguageModel {
 		apiKey,
 		baseURL: "https://openrouter.ai/api/v1",
 		headers: {
-			"HTTP-Referer": "https://github.com/3li7alaki/fc",
+			"HTTP-Referer": "https://github.com/3li7alaki/flash",
 		},
 	});
 	return openrouter(modelId);
@@ -37,7 +37,7 @@ export async function createModelForTier(
 
 	if (!apiKey) {
 		throw new Error(
-			"No API key. Run 'fc config set ai.apiKey <key>' or set FC_API_KEY",
+			"No API key. Run 'flash config set ai.apiKey <key>' or set FLASH_API_KEY",
 		);
 	}
 

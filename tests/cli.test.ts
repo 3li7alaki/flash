@@ -80,28 +80,28 @@ async function runCli(
 }
 
 describe("CLI integration", () => {
-	test("fc version prints version string", async () => {
+	test("flash version prints version string", async () => {
 		const { stdout } = await runCli("version");
-		expect(stdout.trim()).toMatch(/^fc v\d+\.\d+\.\d+$/);
+		expect(stdout.trim()).toMatch(/^flash v\d+\.\d+\.\d+$/);
 	});
 
-	test("fc --version prints version string", async () => {
+	test("flash --version prints version string", async () => {
 		const { stdout } = await runCli("--version");
-		expect(stdout.trim()).toMatch(/^fc v\d+\.\d+\.\d+$/);
+		expect(stdout.trim()).toMatch(/^flash v\d+\.\d+\.\d+$/);
 	});
 
-	test("fc with no args shows help", async () => {
+	test("flash with no args shows help", async () => {
 		const { stdout } = await runCli();
-		expect(stdout).toContain("fc - Flashcard CLI");
+		expect(stdout).toContain("flash - Flashcard CLI");
 		expect(stdout).toContain("Core");
 		expect(stdout).toContain("AI-Powered");
 		expect(stdout).toContain("Ecosystem");
 		expect(stdout).toContain("Maintenance");
 	});
 
-	test("fc --help shows help", async () => {
+	test("flash --help shows help", async () => {
 		const { stdout } = await runCli("--help");
-		expect(stdout).toContain("fc - Flashcard CLI");
+		expect(stdout).toContain("flash - Flashcard CLI");
 	});
 
 	test("help includes all command categories", async () => {

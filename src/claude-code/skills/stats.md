@@ -1,21 +1,21 @@
-# /fc stats
+# /flash stats
 
 Show flashcard statistics and study progress with conversational commentary.
 
 ## When to activate
 
-User says `/fc stats`, "show my stats", "how am I doing", "study progress", or similar.
+User says `/flash stats`, "show my stats", "how am I doing", "study progress", or similar.
 
 ## Instructions
 
 1. **Gather data.** Run both stat commands:
 
    ```bash
-   fc stats
+   flash stats
    ```
 
    ```bash
-   fc daily
+   flash daily
    ```
 
 2. **Present the data conversationally.** Don't just dump the table output. Interpret it:
@@ -32,11 +32,11 @@ User says `/fc stats`, "show my stats", "how am I doing", "study progress", or s
 
 4. **Offer suggestions based on the data:**
    - High due count: "Start with [deck] — it has the most due cards."
-   - Low retention on a deck: "Your [deck] retention is at 45%. Want to see your weak areas? Try `/fc weak`."
+   - Low retention on a deck: "Your [deck] retention is at 45%. Want to see your weak areas? Try `/flash weak`."
    - Neglected deck: "You haven't reviewed [deck] in 2 weeks. Want to do a quick session?"
-   - Good progress: "You've mastered 80% of [deck]. Ready for harder cards? Try `fc challenge`."
+   - Good progress: "You've mastered 80% of [deck]. Ready for harder cards? Try `flash challenge`."
 
-5. **If the user asks for a specific deck:** Run `fc stats <deck>` and provide focused analysis of that deck.
+5. **If the user asks for a specific deck:** Run `flash stats <deck>` and provide focused analysis of that deck.
 
 ## Conversational style
 

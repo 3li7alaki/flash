@@ -1,22 +1,22 @@
 ```
-  ███████╗ ██████╗
-  ██╔════╝██╔════╝
-  █████╗  ██║
-  ██╔══╝  ██║
-  ██║     ╚██████╗
-  ╚═╝      ╚═════╝
+  ███████╗██╗      █████╗ ███████╗██╗  ██╗
+  ██╔════╝██║     ██╔══██╗██╔════╝██║  ██║
+  █████╗  ██║     ███████║███████╗███████║
+  ██╔══╝  ██║     ██╔══██║╚════██║██╔══██║
+  ██║     ███████╗██║  ██║███████║██║  ██║
+  ╚═╝     ╚══════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
 ```
 
 ### Flashcard CLI with AI superpowers
 
 > Plain text flashcards. Smart scheduling. AI-powered generation. All from your terminal.
 
-**fc** is a CLI-first flashcard tool that uses spaced repetition (FSRS-5) to schedule reviews and AI agents to generate cards from anything — topics, articles, code, docs, URLs. It stores everything in a human-readable `.fc` format that's git-friendly and yours to keep.
+**flash** is a CLI-first flashcard tool that uses spaced repetition (FSRS-5) to schedule reviews and AI agents to generate cards from anything — topics, articles, code, docs, URLs. It stores everything in a human-readable `.fc` format that's git-friendly and yours to keep.
 
 ## Install
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/3li7alaki/fc/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/3li7alaki/flash/main/install.sh | bash
 ```
 
 ## Features
@@ -65,10 +65,10 @@ All AI features are powered by a unified agent architecture — the same agents 
 **Generate cards from anything:**
 
 ```bash
-fc gen "teach me about TCP/IP"          # From a topic
-fc gen --from article.md                # From a file
-fc gen --from https://example.com/post  # From a URL
-cat notes.md | fc gen                   # From stdin
+flash gen "teach me about TCP/IP"          # From a topic
+flash gen --from article.md                # From a file
+flash gen --from https://example.com/post  # From a URL
+cat notes.md | flash gen                   # From stdin
 ```
 
 **AI answer grading** — during review, type your answer in natural language. The AI evaluates semantic similarity, not exact wording. "the value moves" matches "ownership transfers" — it tells you what you got right and what you missed. Falls back to self-grading when offline.
@@ -84,18 +84,18 @@ Your answer: the value moves and the old one can't be used
 **Socratic learning:**
 
 ```bash
-fc learn <topic>            # AI teaches you, finds your gaps, generates cards for weak spots
+flash learn <topic>            # AI teaches you, finds your gaps, generates cards for weak spots
 ```
 
 **Beyond generation:**
 
 | Command | What it does |
 |---------|-------------|
-| `fc weak` | Analyzes your mistakes and generates targeted cards |
-| `fc explain <card-id>` | Deeper explanation of a card you're struggling with |
-| `fc rephrase <card-id>` | AI rephrases a confusing card so it clicks |
-| `fc challenge` | Generates harder variants of cards you've mastered |
-| `fc summarize <deck>` | Generates a cheat sheet from a deck |
+| `flash weak` | Analyzes your mistakes and generates targeted cards |
+| `flash explain <card-id>` | Deeper explanation of a card you're struggling with |
+| `flash rephrase <card-id>` | AI rephrases a confusing card so it clicks |
+| `flash challenge` | Generates harder variants of cards you've mastered |
+| `flash summarize <deck>` | Generates a cheat sheet from a deck |
 
 ### Claude Code Integration
 
@@ -103,11 +103,11 @@ Study without leaving your editor. The same AI agents that power the CLI run nat
 
 **Skills:**
 ```
-/fc review [deck]     — Review session inside Claude Code
-/fc gen "topic"       — Generate a deck from conversation context
-/fc weak              — Weak cards with AI explanations
-/fc quiz              — Quick quiz (5-10 cards)
-/fc stats             — Learning dashboard
+/flash review [deck]     — Review session inside Claude Code
+/flash gen "topic"       — Generate a deck from conversation context
+/flash weak              — Weak cards with AI explanations
+/flash quiz              — Quick quiz (5-10 cards)
+/flash stats             — Learning dashboard
 ```
 
 **Agents:**
@@ -120,16 +120,16 @@ Study without leaving your editor. The same AI agents that power the CLI run nat
 Decks are plain text. Git handles everything else.
 
 ```bash
-fc share <deck>              # Publish deck as a GitHub repo
-fc follow <url>              # Follow someone's shared deck
-fc sync                      # Pull updates from followed decks + push your own
+flash share <deck>              # Publish deck as a GitHub repo
+flash follow <url>              # Follow someone's shared deck
+flash sync                      # Pull updates from followed decks + push your own
 ```
 
 Share a deck → others follow it → you update cards → they get the updates. No proprietary sync. Just git.
 
 ## Configuration
 
-Config lives at `~/.config/fc/config.json`. Run `fc config` to set up interactively.
+Config lives at `~/.config/flash/config.json`. Run `flash config` to set up interactively.
 
 ```json
 {
@@ -154,74 +154,74 @@ Config lives at `~/.config/fc/config.json`. Run `fc config` to set up interactiv
 | Key | What it does | Default |
 |-----|-------------|---------|
 | `ai.provider` | LLM provider | `openrouter` |
-| `ai.apiKey` | API key (also via `FC_API_KEY` env var) | — |
+| `ai.apiKey` | API key (also via `FLASH_API_KEY` env var) | — |
 | `ai.model` | Model for generation and grading | `anthropic/claude-sonnet-4` |
 | `scheduler.algorithm` | Scheduling algorithm | `fsrs-5` |
 | `review.aiGrading` | AI evaluates answers instead of self-grading | `true` |
 | `review.showHints` | Show hints during review | `true` |
 | `review.cardsPerSession` | Max cards per session (0 = all due) | `0` |
 | `decksDir` | Where decks are stored | `~/flashcards` |
-| `editor` | Editor for `fc edit` | `$EDITOR` |
+| `editor` | Editor for `flash edit` | `$EDITOR` |
 
 ## CLI Reference
 
 ### Core
 
 ```bash
-fc new <name>                       # Create a new deck
-fc new <name> --template <template> # Create from a template
-fc add <deck>                       # Add a card interactively
-fc edit <deck>                      # Open deck in $EDITOR
-fc list                             # List all decks with stats
-fc review [deck]                    # Start review session (FSRS-scheduled)
-fc review --tag <tag>               # Review by tag across decks
-fc review --mix                     # Interleaved review across decks
-fc stats [deck]                     # Learning stats and weak areas
-fc daily                            # Dashboard: due cards, weak spots, study plan
-fc search <query>                   # Search across all decks
-fc merge <deck1> <deck2>            # Merge two decks
-fc lint [deck]                      # Validate .fc files, report errors
-fc fix [deck]                       # Auto-fix format issues
-fc config                           # Manage settings
+flash new <name>                       # Create a new deck
+flash new <name> --template <template> # Create from a template
+flash add <deck>                       # Add a card interactively
+flash edit <deck>                      # Open deck in $EDITOR
+flash list                             # List all decks with stats
+flash review [deck]                    # Start review session (FSRS-scheduled)
+flash review --tag <tag>               # Review by tag across decks
+flash review --mix                     # Interleaved review across decks
+flash stats [deck]                     # Learning stats and weak areas
+flash daily                            # Dashboard: due cards, weak spots, study plan
+flash search <query>                   # Search across all decks
+flash merge <deck1> <deck2>            # Merge two decks
+flash lint [deck]                      # Validate .flash files, report errors
+flash fix [deck]                       # Auto-fix format issues
+flash config                           # Manage settings
 ```
 
 ### Import/Export
 
 ```bash
-fc export <deck> --format csv       # Export deck to CSV
-fc import <file.csv> [deck]         # Import cards from CSV
+flash export <deck> --format csv       # Export deck to CSV
+flash import <file.csv> [deck]         # Import cards from CSV
 ```
 
 ### AI-Powered
 
 ```bash
-fc gen "topic"                      # Generate deck from topic
-fc gen --from <file>                # Generate from file
-fc gen --from <url>                 # Generate from URL
-cat file | fc gen                   # Generate from stdin
-fc learn <topic>                    # Socratic teaching mode
-fc weak                             # Analyze mistakes, generate targeted cards
-fc explain <card-id>                # Deep explanation
-fc rephrase <card-id>              # Clearer phrasing
-fc challenge                        # Harder variants of mastered cards
-fc summarize <deck>                 # Generate cheat sheet
+flash gen "topic"                      # Generate deck from topic
+flash gen --from <file>                # Generate from file
+flash gen --from <url>                 # Generate from URL
+cat file | flash gen                   # Generate from stdin
+flash learn <topic>                    # Socratic teaching mode
+flash weak                             # Analyze mistakes, generate targeted cards
+flash explain <card-id>                # Deep explanation
+flash rephrase <card-id>              # Clearer phrasing
+flash challenge                        # Harder variants of mastered cards
+flash summarize <deck>                 # Generate cheat sheet
 ```
 
 ### Ecosystem
 
 ```bash
-fc share <deck>                     # Publish deck as a GitHub repo
-fc follow <url>                     # Follow a shared deck
-fc sync                             # Pull followed deck updates + push yours
-fc templates                        # List deck templates
+flash share <deck>                     # Publish deck as a GitHub repo
+flash follow <url>                     # Follow a shared deck
+flash sync                             # Pull followed deck updates + push yours
+flash templates                        # List deck templates
 ```
 
 ### Maintenance
 
 ```bash
-fc update                           # Update fc to latest version
-fc doctor                           # Health check — config, deps, state
-fc version                          # Show current version
+flash update                           # Update flash to latest version
+flash doctor                           # Health check — config, deps, state
+flash version                          # Show current version
 ```
 
 ## Contributing

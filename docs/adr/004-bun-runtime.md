@@ -4,7 +4,7 @@
 Accepted
 
 ## Context
-fc is a CLI tool that users run frequently (daily reviews). Startup time matters. Options:
+flash is a CLI tool that users run frequently (daily reviews). Startup time matters. Options:
 - Node.js — universal, rock-solid, needs build step for TypeScript
 - Bun — fast startup, native TypeScript, built-in test runner
 - Deno — native TypeScript, different module system, smaller ecosystem

@@ -1,17 +1,17 @@
-# /fc weak
+# /flash weak
 
 Identify weak areas and offer targeted help.
 
 ## When to activate
 
-User says `/fc weak`, "what am I struggling with", "show weak areas", "where do I need practice", or similar.
+User says `/flash weak`, "what am I struggling with", "show weak areas", "where do I need practice", or similar.
 
 ## Instructions
 
 1. **Run the analyzer.** Use the CLI to find weak areas:
 
    ```bash
-   fc weak
+   flash weak
    ```
 
    This identifies cards with frequent lapses across all decks.
@@ -31,14 +31,14 @@ User says `/fc weak`, "what am I struggling with", "show weak areas", "where do 
    - If yes, generate cards using:
 
      ```bash
-     fc gen "targeted practice for [specific weak concept]" --count 5
+     flash gen "targeted practice for [specific weak concept]" --count 5
      ```
 
    - Show the generated cards and offer to edit before saving
 
 5. **Suggest a study plan.** Based on the weak areas:
    - Prioritize which topics to tackle first (highest lapse count)
-   - Suggest reviewing the weak deck: `fc review weak-areas`
+   - Suggest reviewing the weak deck: `flash review weak-areas`
    - Recommend spacing: "Review these daily for the next 3 days, then let the scheduler take over"
 
 ## Conversational style

@@ -1,8 +1,8 @@
-# fc — Product Specification
+# flash — Product Specification
 
 ## What is fc?
 
-fc is a CLI flashcard tool that combines spaced repetition scheduling with AI-powered card generation and answer evaluation. It uses a custom plain-text format (`.fc`) designed for both humans and machines, stores review state separately, and integrates into developer workflows via Claude Code.
+flash is a CLI flashcard tool that combines spaced repetition scheduling with AI-powered card generation and answer evaluation. It uses a custom plain-text format (`.fc`) designed for both humans and machines, stores review state separately, and integrates into developer workflows via Claude Code.
 
 ## Problem
 
@@ -221,43 +221,43 @@ Agents live in `src/agents/` as TypeScript modules that export their prompt and 
 - Role: Evaluates user answers against correct answers using semantic similarity
 - Input: question, correct answer, user answer
 - Output: correct/partial/incorrect, feedback, suggested rating
-- Used by: `fc review` (when `review.aiGrading` enabled), Quiz Agent in Claude Code
+- Used by: `flash review` (when `review.aiGrading` enabled), Quiz Agent in Claude Code
 
 **Generator Agent**
 - Role: Creates high-quality flashcards from source content
 - Input: content (text, code, URL content), target card count, existing deck tags
 - Output: array of cards in `.fc` format
-- Used by: `fc gen`, Generator skill in Claude Code
+- Used by: `flash gen`, Generator skill in Claude Code
 
 **Teacher Agent**
 - Role: Teaches a topic through Socratic questioning, identifies knowledge gaps
 - Input: topic, conversation history
 - Output: questions, explanations, identified gaps, generated cards for weak areas
-- Used by: `fc learn`
+- Used by: `flash learn`
 
 **Analyzer Agent**
 - Role: Analyzes review history to find patterns in mistakes
 - Input: review state data, card content
 - Output: weak areas, suggested cards, study recommendations
-- Used by: `fc weak`, `fc daily`, Coach Agent in Claude Code
+- Used by: `flash weak`, `flash daily`, Coach Agent in Claude Code
 
 **Explainer Agent**
 - Role: Provides deeper explanations or rephrases confusing cards
 - Input: card content, review history (how many times failed), mode (explain or rephrase)
 - Output: explanation or rephrased card
-- Used by: `fc explain`, `fc rephrase`
+- Used by: `flash explain`, `flash rephrase`
 
 **Challenger Agent**
 - Role: Generates harder variants of mastered cards
 - Input: mastered card content, related tags
 - Output: harder cards in `.fc` format
-- Used by: `fc challenge`
+- Used by: `flash challenge`
 
 **Summarizer Agent**
 - Role: Creates a study cheat sheet from a deck
 - Input: all cards in a deck
 - Output: organized summary/cheat sheet
-- Used by: `fc summarize`
+- Used by: `flash summarize`
 
 ### Claude Code Agents (Composite)
 
@@ -273,7 +273,7 @@ These agents compose the base agents above for conversational use:
 
 ## Configuration
 
-Config at `~/.config/fc/config.json` (XDG-compliant).
+Config at `~/.config/flash/config.json` (XDG-compliant).
 
 ```json
 {
@@ -305,9 +305,9 @@ Config at `~/.config/fc/config.json` (XDG-compliant).
 | `review.showHints` | Show hints during review | `true` |
 | `review.cardsPerSession` | Max cards per session (0 = all due) | `0` |
 | `decksDir` | Where decks are stored | `"~/flashcards"` |
-| `editor` | Editor for `fc edit` | `"$EDITOR"` |
+| `editor` | Editor for `flash edit` | `"$EDITOR"` |
 
-API key can also be set via `FC_API_KEY` environment variable (takes precedence over config).
+API key can also be set via `FLASH_API_KEY` environment variable (takes precedence over config).
 
 ---
 
@@ -320,14 +320,14 @@ API key can also be set via `FC_API_KEY` environment variable (takes precedence 
 | LLM | Vercel AI SDK + OpenRouter | Structured output via Zod, streaming, retries — any model via OpenRouter |
 | Terminal UI | @clack/prompts | Lightweight, clean interactive prompts |
 | Storage | `.fc` + `.fc.state` JSON | Human-readable content, structured state |
-| Config | JSON (`~/.config/fc/`) | XDG-compliant, zero deps, native Bun support |
+| Config | JSON (`~/.config/flash/`) | XDG-compliant, zero deps, native Bun support |
 | Sync | Git | Plain text = free version control and sharing |
 | Claude Code | Custom skills + agents | Deep editor workflow integration |
 
 ## Architecture
 
 ```
-~/.config/fc/
+~/.config/flash/
   config.json              # API key, model, algorithm, preferences
   templates/               # Deck templates
 
@@ -338,10 +338,10 @@ API key can also be set via `FC_API_KEY` environment variable (takes precedence 
 src/
   ├── cli.ts               # Entry point, command routing
   ├── commands/             # Command handlers
-  ├── format/               # .fc parser, serializer, linter, fixer, CSV
+  ├── format/               # .flash parser, serializer, linter, fixer, CSV
   │   ├── parser.ts         # .fc → card objects
-  │   ├── serializer.ts     # card objects → .fc text
-  │   ├── linter.ts         # validate .fc files
+  │   ├── serializer.ts     # card objects → .flash text
+  │   ├── linter.ts         # validate .flash files
   │   ├── fixer.ts          # auto-fix format issues
   │   └── csv.ts            # CSV import/export
   ├── agents/               # Agent definitions (prompts + schemas)
@@ -375,7 +375,7 @@ docs/
 
 ### Versioning
 
-fc uses semantic versioning (`MAJOR.MINOR.PATCH`). Version is stored in `package.json`.
+flash uses semantic versioning (`MAJOR.MINOR.PATCH`). Version is stored in `package.json`.
 
 - **MAJOR** — breaking changes to `.fc` format, config schema, or CLI interface
 - **MINOR** — new commands, new card fields, new config options
@@ -383,7 +383,7 @@ fc uses semantic versioning (`MAJOR.MINOR.PATCH`). Version is stored in `package
 
 ### Update
 
-`fc update` pulls the latest version from git (same pattern as the install script). It:
+`flash update` pulls the latest version from git (same pattern as the install script). It:
 1. Fetches latest from origin
 2. Compares versions
 3. Runs config migration if the config schema changed
@@ -391,8 +391,8 @@ fc uses semantic versioning (`MAJOR.MINOR.PATCH`). Version is stored in `package
 
 ### Config Migration
 
-When the config schema changes between versions, fc handles it automatically:
-1. On startup, fc reads `config.json` and checks for a `version` field
+When the config schema changes between versions, flash handles it automatically:
+1. On startup, flash reads `config.json` and checks for a `version` field
 2. If missing or outdated, it runs migrations sequentially (v1→v2→v3...)
 3. Each migration adds new fields with defaults, renames changed fields, removes deprecated ones
 4. The original config is backed up to `config.json.bak` before migration
@@ -402,7 +402,7 @@ This means users never face broken configs after updating.
 
 ### Doctor
 
-`fc doctor` runs health checks:
+`flash doctor` runs health checks:
 - Config exists and is valid JSON
 - Config schema is current version (runs migration if not)
 - API key is set (warn if missing — not an error, AI features are optional)
@@ -420,28 +420,28 @@ This means users never face broken configs after updating.
 Everything needed to create, review, and manage flashcards without an API key.
 
 - `.fc` format parser/serializer (all card types: Q/A, cloze, code-output, reversible)
-- Format tooling: linter (`fc lint`), fixer (`fc fix`), CSV import/export
+- Format tooling: linter (`flash lint`), fixer (`flash fix`), CSV import/export
 - Round-trip test: `.fc` → CSV → `.fc` produces identical output
-- Deck management: `fc new`, `fc add`, `fc edit`, `fc list`, `fc search`, `fc merge`
+- Deck management: `flash new`, `flash add`, `flash edit`, `flash list`, `flash search`, `flash merge`
 - Review engine with FSRS-5 scheduling, tag filtering, interleaved mode
 - Self-grading during review (again/hard/good/easy)
 - Stats and daily dashboard
 - Config system with migration support
 - Deck templates
-- CLI maintenance: `fc version`, `fc update`, `fc doctor`
+- CLI maintenance: `flash version`, `flash update`, `flash doctor`
 - Install script (one-liner, bootstraps Bun)
 
 ### Phase 2 — AI Integration
 Agent-powered AI features via OpenRouter.
 
 - Agent architecture: client, prompt system, structured I/O
-- Grader Agent → AI answer grading in `fc review`
-- Generator Agent → `fc gen` from topics, files, URLs, stdin
-- Teacher Agent → `fc learn` Socratic mode
-- Analyzer Agent → `fc weak`, enhanced `fc daily`
-- Explainer Agent → `fc explain`, `fc rephrase`
-- Challenger Agent → `fc challenge`
-- Summarizer Agent → `fc summarize`
+- Grader Agent → AI answer grading in `flash review`
+- Generator Agent → `flash gen` from topics, files, URLs, stdin
+- Teacher Agent → `flash learn` Socratic mode
+- Analyzer Agent → `flash weak`, enhanced `flash daily`
+- Explainer Agent → `flash explain`, `flash rephrase`
+- Challenger Agent → `flash challenge`
+- Summarizer Agent → `flash summarize`
 
 ### Phase 3 — Claude Code Integration
 Same agents, conversational interface.
@@ -454,7 +454,7 @@ Same agents, conversational interface.
 ### Phase 4 — Ecosystem
 Sharing, sync, and polish.
 
-- `fc share` + `fc follow` (git-based deck sharing)
-- `fc sync` (git-based multi-device sync)
-- `fc watch <dir>` — auto-generate cards from new files
+- `flash share` + `flash follow` (git-based deck sharing)
+- `flash sync` (git-based multi-device sync)
+- `flash watch <dir>` — auto-generate cards from new files
 - Optional TUI mode with richer terminal UI

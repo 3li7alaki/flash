@@ -157,7 +157,7 @@ describe("formatConfig", () => {
 
 // --- version ---
 
-describe("fc version", () => {
+describe("flash version", () => {
 	test("outputs version string", async () => {
 		const logs: string[] = [];
 		const originalLog = console.log;
@@ -169,7 +169,7 @@ describe("fc version", () => {
 
 		console.log = originalLog;
 		expect(logs.length).toBe(1);
-		expect(logs[0]).toMatch(/^fc v\d+\.\d+\.\d+$/);
+		expect(logs[0]).toMatch(/^flash v\d+\.\d+\.\d+$/);
 	});
 });
 
@@ -225,8 +225,8 @@ describe("fc doctor", () => {
 	});
 
 	test("doctor warns about missing API key", async () => {
-		const originalKey = process.env.FC_API_KEY;
-		delete process.env.FC_API_KEY;
+		const originalKey = process.env.FLASH_API_KEY;
+		delete process.env.FLASH_API_KEY;
 
 		const config = getDefaultConfig();
 		// Default config has empty apiKey
@@ -235,7 +235,7 @@ describe("fc doctor", () => {
 		expect(key).toBe("");
 
 		if (originalKey !== undefined) {
-			process.env.FC_API_KEY = originalKey;
+			process.env.FLASH_API_KEY = originalKey;
 		}
 	});
 

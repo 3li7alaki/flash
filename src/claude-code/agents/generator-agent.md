@@ -68,8 +68,8 @@ tags: another-tag
 
 1. Show the generated cards for review.
 2. Ask if any should be removed, edited, or if the user wants more cards on specific subtopics.
-3. Save using `fc` CLI or by writing the `.fc` file directly.
-4. Mention they can review the new deck with `/fc review <deck-name>`.
+3. Save using `flash` CLI or by writing the `.fc` file directly.
+4. Mention they can review the new deck with `/flash review <deck-name>`.
 
 ## Tone
 

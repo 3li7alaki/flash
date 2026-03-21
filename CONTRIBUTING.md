@@ -17,7 +17,7 @@
 fc/
 ├── src/
 │   ├── commands/          # CLI command handlers
-│   ├── format/            # .fc parser and serializer
+│   ├── format/            # .flash parser and serializer
 │   ├── scheduler/         # FSRS-5 implementation
 │   ├── ai/                # OpenRouter integration
 │   ├── claude-code/       # Skills and agent definitions
@@ -47,7 +47,7 @@ Format: `type(scope): description`
 feat(parser): add cloze deletion card type
 fix(scheduler): correct FSRS-5 difficulty calculation
 docs(readme): add CLI reference section
-feat(ai): add URL content extraction for fc gen
+feat(ai): add URL content extraction for flash gen
 ```
 
 ## The `.fc` Format

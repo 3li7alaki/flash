@@ -155,7 +155,7 @@ export function resolveDecksDir(config: FcConfig): string {
 }
 
 export function getApiKey(config: FcConfig): string {
-	const envKey = process.env.FC_API_KEY;
+	const envKey = process.env.FLASH_API_KEY;
 	if (envKey) {
 		return envKey;
 	}

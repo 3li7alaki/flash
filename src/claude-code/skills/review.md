@@ -1,20 +1,20 @@
-# /fc review [deck]
+# /flash review [deck]
 
 Review flashcards conversationally. Shows cards one at a time, accepts natural language answers, grades them, and tracks progress.
 
 ## When to activate
 
-User says `/fc review`, "review my flashcards", "study time", "let's review", or similar.
+User says `/flash review`, "review my flashcards", "study time", "let's review", or similar.
 
 ## Instructions
 
 1. **Start the session.** Run the CLI to find due cards:
 
    ```bash
-   fc review --dry-run 2>/dev/null || fc stats
+   flash review --dry-run 2>/dev/null || flash stats
    ```
 
-   If the user specifies a deck name, pass it: `fc stats <deck>`. Look at the "Due" column to understand what needs reviewing.
+   If the user specifies a deck name, pass it: `flash stats <deck>`. Look at the "Due" column to understand what needs reviewing.
 
 2. **Load the deck.** Pick the deck with the most due cards (or the one the user specified). Read the `.fc` file directly to get card content:
 
@@ -40,7 +40,7 @@ User says `/fc review`, "review my flashcards", "study time", "let's review", or
 6. **Record the rating.** Use the CLI to submit the rating:
 
    ```bash
-   fc review <deck> --card-id <id> --rating <again|hard|good|easy>
+   flash review <deck> --card-id <id> --rating <again|hard|good|easy>
    ```
 
    If the CLI doesn't support single-card rating flags, note this and batch the ratings. The user's self-assessment takes priority over your suggested rating.

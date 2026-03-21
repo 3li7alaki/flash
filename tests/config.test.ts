@@ -46,7 +46,7 @@ describe("getConfigDir", () => {
 		expect(getConfigDir()).toBe("/tmp/custom-config/fc");
 	});
 
-	test("falls back to ~/.config/fc when XDG_CONFIG_HOME is not set", () => {
+	test("falls back to ~/.config/flash when XDG_CONFIG_HOME is not set", () => {
 		delete process.env.XDG_CONFIG_HOME;
 		const home = process.env.HOME ?? "";
 		expect(getConfigDir()).toBe(join(home, ".config", "fc"));
@@ -158,18 +158,18 @@ describe("migrateConfig", () => {
 });
 
 describe("getApiKey", () => {
-	const originalKey = process.env.FC_API_KEY;
+	const originalKey = process.env.FLASH_API_KEY;
 
 	afterEach(() => {
 		if (originalKey === undefined) {
-			delete process.env.FC_API_KEY;
+			delete process.env.FLASH_API_KEY;
 		} else {
-			process.env.FC_API_KEY = originalKey;
+			process.env.FLASH_API_KEY = originalKey;
 		}
 	});
 
-	test("prefers FC_API_KEY env var over config", () => {
-		process.env.FC_API_KEY = "env-key-123";
+	test("prefers FLASH_API_KEY env var over config", () => {
+		process.env.FLASH_API_KEY = "env-key-123";
 		const config = getDefaultConfig();
 		config.ai.apiKey = "config-key-456";
 
@@ -177,7 +177,7 @@ describe("getApiKey", () => {
 	});
 
 	test("falls back to config value when env var is not set", () => {
-		delete process.env.FC_API_KEY;
+		delete process.env.FLASH_API_KEY;
 		const config = getDefaultConfig();
 		config.ai.apiKey = "config-key-456";
 
@@ -185,7 +185,7 @@ describe("getApiKey", () => {
 	});
 
 	test("returns empty string when neither is set", () => {
-		delete process.env.FC_API_KEY;
+		delete process.env.FLASH_API_KEY;
 		const config = getDefaultConfig();
 		expect(getApiKey(config)).toBe("");
 	});
