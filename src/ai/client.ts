@@ -1,8 +1,17 @@
 import { createOpenAI } from "@ai-sdk/openai";
 import type { LanguageModel } from "ai";
 import { getApiKey, loadConfig } from "../config/config.ts";
+import type { FcConfig } from "../types.ts";
 
-export function createProvider(apiKey: string, model: string): LanguageModel {
+export type ModelTier = "fast" | "balanced" | "heavy";
+
+const DEFAULT_MODELS: Record<ModelTier, string> = {
+	fast: "anthropic/claude-haiku",
+	balanced: "anthropic/claude-sonnet-4",
+	heavy: "anthropic/claude-sonnet-4",
+};
+
+export function createProvider(apiKey: string, modelId: string): LanguageModel {
 	const openrouter = createOpenAI({
 		apiKey,
 		baseURL: "https://openrouter.ai/api/v1",
@@ -10,10 +19,20 @@ export function createProvider(apiKey: string, model: string): LanguageModel {
 			"HTTP-Referer": "https://github.com/3li7alaki/fc",
 		},
 	});
-	return openrouter(model);
+	return openrouter(modelId);
 }
 
-export async function createModel(
+export function resolveModel(
+	tier: ModelTier,
+	config: FcConfig,
+): string {
+	// User override in config takes precedence
+	if (config.ai.model) return config.ai.model;
+	return DEFAULT_MODELS[tier];
+}
+
+export async function createModelForTier(
+	tier: ModelTier,
 	configPath?: string,
 ): Promise<LanguageModel> {
 	const config = await loadConfig(configPath);
@@ -25,5 +44,6 @@ export async function createModel(
 		);
 	}
 
-	return createProvider(apiKey, config.ai.model);
+	const modelId = resolveModel(tier, config);
+	return createProvider(apiKey, modelId);
 }

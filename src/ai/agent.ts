@@ -1,9 +1,11 @@
 import { type LanguageModel, generateObject, generateText } from "ai";
 import type { ZodType } from "zod";
+import type { ModelTier } from "./client.ts";
 
 export interface AgentDefinition<TInput, TOutput> {
 	name: string;
 	role: string;
+	tier: ModelTier;
 	systemPrompt: string;
 	buildUserMessage: (input: TInput) => string;
 	outputSchema?: ZodType<TOutput>;
