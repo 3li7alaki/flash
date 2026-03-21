@@ -1,4 +1,4 @@
-import { type LanguageModel, generateObject, generateText } from "ai";
+import { generateObject, generateText, type LanguageModel } from "ai";
 import type { ZodType } from "zod";
 import type { ModelTier } from "./client.ts";
 

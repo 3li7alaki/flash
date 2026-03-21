@@ -22,10 +22,7 @@ export function createProvider(apiKey: string, modelId: string): LanguageModel {
 	return openrouter(modelId);
 }
 
-export function resolveModel(
-	tier: ModelTier,
-	config: FcConfig,
-): string {
+export function resolveModel(tier: ModelTier, config: FcConfig): string {
 	// User override in config takes precedence
 	if (config.ai.model) return config.ai.model;
 	return DEFAULT_MODELS[tier];
