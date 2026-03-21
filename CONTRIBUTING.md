@@ -11,24 +11,6 @@
 7. Commit with the conventions below
 8. Push and open a PR
 
-## Project Structure
-
-```
-flash/
-├── src/
-│   ├── commands/          # CLI command handlers
-│   ├── format/            # .fc parser and serializer
-│   ├── scheduler/         # FSRS-5 implementation
-│   ├── ai/                # OpenRouter integration
-│   └── review/            # Interactive review engine
-├── agents/                # Claude Code composite agent prompts
-├── skills/                # Claude Code skill definitions
-├── templates/             # Deck templates
-├── tests/                 # Test suite
-├── PRODUCT.md             # Product specification and design decisions
-└── README.md
-```
-
 ## Commit Conventions
 
 Format: `type(scope): description`
@@ -43,14 +25,6 @@ Format: `type(scope): description`
 
 **Scope:** use the component name (e.g., `parser`, `scheduler`, `ai`, `review`).
 
-**Examples:**
-```
-feat(parser): add cloze deletion card type
-fix(scheduler): correct FSRS-5 difficulty calculation
-docs(readme): add CLI reference section
-feat(ai): add URL content extraction for flash gen
-```
-
 ## The `.fc` Format
 
 If you're modifying the parser or adding card features:
@@ -59,12 +33,13 @@ If you're modifying the parser or adding card features:
 - Keep the format machine-parseable — unambiguous, no context-dependent parsing
 - Card content lives in `.fc` files, review state lives in `.fc.state` files — never mix them
 - Test with multiline content, special characters, and edge cases
+- See [PRODUCT.md](PRODUCT.md) for the full format specification
 
 ## Writing Commands
 
-- Commands go in `src/commands/`
-- Each command is a single file with a clear responsibility
-- AI-powered commands should work gracefully when offline (error message, not crash)
+- Commands go in `src/commands/`, one file per command
+- All commands must support headless mode via flags (no hanging prompts)
+- AI-powered commands should fail gracefully when offline (error message, not crash)
 - Core commands must work fully offline
 
 ## Tests
@@ -83,6 +58,5 @@ Cover at minimum:
 ## PRs
 
 - One logical change per PR
-- Keep PRs small — if it touches more than 5 files, consider splitting
 - All tests must pass
 - Update docs if you're changing CLI behavior or the `.fc` format
