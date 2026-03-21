@@ -317,7 +317,7 @@ API key can also be set via `FC_API_KEY` environment variable (takes precedence 
 |-----------|--------|--------|
 | Runtime | Bun | Fast startup for CLI, zero-config TypeScript, built-in test runner |
 | Scheduling | ts-fsrs | Maintained FSRS-5 implementation |
-| LLM | OpenRouter API | Model flexibility — one API, any model |
+| LLM | Vercel AI SDK + OpenRouter | Structured output via Zod, streaming, retries — any model via OpenRouter |
 | Terminal UI | @clack/prompts | Lightweight, clean interactive prompts |
 | Storage | `.fc` + `.fc.state` JSON | Human-readable content, structured state |
 | Config | JSON (`~/.config/fc/`) | XDG-compliant, zero deps, native Bun support |
@@ -352,8 +352,9 @@ src/
   │   ├── explainer.ts
   │   ├── challenger.ts
   │   └── summarizer.ts
-  ├── ai/                   # LLM client (OpenRouter)
-  │   └── client.ts
+  ├── ai/                   # LLM integration (Vercel AI SDK + OpenRouter)
+  │   ├── client.ts         # Provider setup
+  │   └── agent.ts          # Agent framework (defineAgent + Zod schemas)
   ├── scheduler/            # FSRS-5 wrapper
   │   └── scheduler.ts
   ├── review/               # Interactive review engine

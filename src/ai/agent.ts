@@ -1,17 +1,17 @@
-import type { ChatMessage, ChatOptions, OpenRouterClient } from "./client.ts";
+import { type LanguageModel, generateObject, generateText } from "ai";
+import type { ZodType } from "zod";
 
 export interface AgentDefinition<TInput, TOutput> {
 	name: string;
 	role: string;
 	systemPrompt: string;
 	buildUserMessage: (input: TInput) => string;
-	parseResponse: (response: string) => TOutput;
+	outputSchema?: ZodType<TOutput>;
 	temperature?: number;
-	maxTokens?: number;
 }
 
 export interface Agent<TInput, TOutput> {
-	run: (client: OpenRouterClient, input: TInput) => Promise<TOutput>;
+	run: (model: LanguageModel, input: TInput) => Promise<TOutput>;
 	definition: AgentDefinition<TInput, TOutput>;
 }
 
@@ -20,19 +20,27 @@ export function defineAgent<TInput, TOutput>(
 ): Agent<TInput, TOutput> {
 	return {
 		definition: def,
-		async run(client: OpenRouterClient, input: TInput): Promise<TOutput> {
-			const messages: ChatMessage[] = [
-				{ role: "system", content: def.systemPrompt },
-				{ role: "user", content: def.buildUserMessage(input) },
-			];
+		async run(model: LanguageModel, input: TInput): Promise<TOutput> {
+			const prompt = def.buildUserMessage(input);
 
-			const options: ChatOptions = {
+			if (def.outputSchema) {
+				const { object } = await generateObject({
+					model,
+					system: def.systemPrompt,
+					prompt,
+					schema: def.outputSchema,
+					temperature: def.temperature,
+				});
+				return object;
+			}
+
+			const { text } = await generateText({
+				model,
+				system: def.systemPrompt,
+				prompt,
 				temperature: def.temperature,
-				maxTokens: def.maxTokens,
-			};
-
-			const response = await client.chat(messages, options);
-			return def.parseResponse(response);
+			});
+			return text as TOutput;
 		},
 	};
 }

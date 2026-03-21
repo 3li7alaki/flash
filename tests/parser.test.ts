@@ -2,9 +2,6 @@ import { describe, expect, test } from "bun:test";
 import { parseCard, parseDeck } from "../src/format/parser.ts";
 import { generateCardId } from "../src/types.ts";
 
-// biome-ignore lint/style/noNonNullAssertion: test assertions after length checks
-type _IgnoreBiome = never;
-
 function card(deck: ReturnType<typeof parseDeck>, index: number) {
 	const c = deck.cards[index];
 	if (!c) throw new Error(`No card at index ${index}`);

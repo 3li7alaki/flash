@@ -48,21 +48,21 @@ describe("template description from @deck line", () => {
 		const templates = await listTemplates();
 		const interviewPrep = templates.find((t) => t.name === "interview-prep");
 		expect(interviewPrep).toBeDefined();
-		expect(interviewPrep!.description).toBe("Interview Prep");
+		expect(interviewPrep?.description).toBe("Interview Prep");
 	});
 
 	test("language has correct description", async () => {
 		const templates = await listTemplates();
 		const language = templates.find((t) => t.name === "language");
 		expect(language).toBeDefined();
-		expect(language!.description).toBe("Language Learning");
+		expect(language?.description).toBe("Language Learning");
 	});
 
 	test("programming has correct description", async () => {
 		const templates = await listTemplates();
 		const programming = templates.find((t) => t.name === "programming");
 		expect(programming).toBeDefined();
-		expect(programming!.description).toBe("Programming Concepts");
+		expect(programming?.description).toBe("Programming Concepts");
 	});
 });
 
@@ -141,7 +141,7 @@ describe("listTemplates with user templates", () => {
 		const templates = await listTemplates();
 		const custom = templates.find((t) => t.name === "my-custom");
 		expect(custom).toBeDefined();
-		expect(custom!.description).toBe("My Custom Template");
-		expect(custom!.builtIn).toBe(false);
+		expect(custom?.description).toBe("My Custom Template");
+		expect(custom?.builtIn).toBe(false);
 	});
 });

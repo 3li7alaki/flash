@@ -22,7 +22,10 @@
 		"typescript": "^5"
 	},
 	"dependencies": {
+		"@ai-sdk/openai": "^3.0.47",
 		"@clack/prompts": "^1.1.0",
-		"ts-fsrs": "^5.3.1"
+		"ai": "^6.0.134",
+		"ts-fsrs": "^5.3.1",
+		"zod": "^4.3.6"
 	}
 }
