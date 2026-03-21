@@ -10,7 +10,7 @@ export function getDefaultConfig(): FcConfig {
 		ai: {
 			provider: "openrouter",
 			apiKey: "",
-			model: "anthropic/claude-sonnet-4",
+			model: "deepseek/deepseek-chat-v3-0324",
 		},
 		scheduler: {
 			algorithm: "fsrs-5",

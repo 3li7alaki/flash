@@ -280,7 +280,7 @@ Config at `~/.config/flash/config.json` (XDG-compliant).
   "ai": {
     "provider": "openrouter",
     "apiKey": "",
-    "model": "anthropic/claude-sonnet-4"
+    "model": "deepseek/deepseek-chat-v3-0324"
   },
   "scheduler": {
     "algorithm": "fsrs-5"
@@ -299,7 +299,7 @@ Config at `~/.config/flash/config.json` (XDG-compliant).
 |-----|-------------|---------|
 | `ai.provider` | LLM provider | `"openrouter"` |
 | `ai.apiKey` | API key | `""` |
-| `ai.model` | Model for generation and grading | `"anthropic/claude-sonnet-4"` |
+| `ai.model` | Model for generation and grading | `"deepseek/deepseek-chat-v3-0324"` |
 | `scheduler.algorithm` | Scheduling algorithm | `"fsrs-5"` |
 | `review.aiGrading` | AI evaluates answer similarity instead of self-grading | `true` |
 | `review.showHints` | Show hints during review | `true` |

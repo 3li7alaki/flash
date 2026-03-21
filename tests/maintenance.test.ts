@@ -16,7 +16,7 @@ describe("config get/set by path", () => {
 	test("getByPath returns nested value", () => {
 		const config = getDefaultConfig();
 		const obj = config as unknown as Record<string, unknown>;
-		expect(getByPath(obj, "ai.model")).toBe("anthropic/claude-sonnet-4");
+		expect(getByPath(obj, "ai.model")).toBe("deepseek/deepseek-chat-v3-0324");
 	});
 
 	test("getByPath returns top-level value", () => {

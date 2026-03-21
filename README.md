@@ -129,14 +129,14 @@ Share a deck → others follow it → you update cards → they get the updates.
 
 ## Configuration
 
-Config lives at `~/.config/flash/config.json`. Run `flash config` to set up interactively.
+Config lives at `~/.config/flash/config.json`. Run `flash config setup` to configure your API key and model interactively.
 
 ```json
 {
   "ai": {
     "provider": "openrouter",
     "apiKey": "",
-    "model": "anthropic/claude-sonnet-4"
+    "model": "deepseek/deepseek-chat-v3-0324"
   },
   "scheduler": {
     "algorithm": "fsrs-5"
@@ -155,7 +155,7 @@ Config lives at `~/.config/flash/config.json`. Run `flash config` to set up inte
 |-----|-------------|---------|
 | `ai.provider` | LLM provider | `openrouter` |
 | `ai.apiKey` | API key (also via `FLASH_API_KEY` env var) | — |
-| `ai.model` | Model for generation and grading | `anthropic/claude-sonnet-4` |
+| `ai.model` | Model for generation and grading | `deepseek/deepseek-chat-v3-0324` |
 | `scheduler.algorithm` | Scheduling algorithm | `fsrs-5` |
 | `review.aiGrading` | AI evaluates answers instead of self-grading | `true` |
 | `review.showHints` | Show hints during review | `true` |
@@ -170,7 +170,7 @@ Config lives at `~/.config/flash/config.json`. Run `flash config` to set up inte
 ```bash
 flash new <name>                       # Create a new deck
 flash new <name> --template <template> # Create from a template
-flash add <deck>                       # Add a card interactively
+flash add <deck>                       # Add a card (interactive or --question/--answer flags)
 flash edit <deck>                      # Open deck in $EDITOR
 flash list                             # List all decks with stats
 flash review [deck]                    # Start review session (FSRS-scheduled)
@@ -180,16 +180,18 @@ flash stats [deck]                     # Learning stats and weak areas
 flash daily                            # Dashboard: due cards, weak spots, study plan
 flash search <query>                   # Search across all decks
 flash merge <deck1> <deck2>            # Merge two decks
-flash lint [deck]                      # Validate .flash files, report errors
+flash lint [deck]                      # Validate .fc files, report errors
 flash fix [deck]                       # Auto-fix format issues
-flash config                           # Manage settings
+flash config                           # Show current settings
+flash config setup                     # Interactive API key and model setup
+flash config setup --key <key> [--model <id>]  # Headless setup
 ```
 
 ### Import/Export
 
 ```bash
 flash export <deck> --format csv       # Export deck to CSV
-flash import <file.csv> [deck]         # Import cards from CSV
+flash import <file.csv> [deck] [--append]  # Import cards from CSV
 ```
 
 ### AI-Powered
@@ -200,10 +202,10 @@ flash gen --from <file>                # Generate from file
 flash gen --from <url>                 # Generate from URL
 cat file | flash gen                   # Generate from stdin
 flash learn <topic>                    # Socratic teaching mode
-flash weak                             # Analyze mistakes, generate targeted cards
+flash weak [--save]                    # Analyze mistakes, generate targeted cards
 flash explain <card-id>                # Deep explanation
 flash rephrase <card-id>              # Clearer phrasing
-flash challenge                        # Harder variants of mastered cards
+flash challenge [--save]               # Harder variants of mastered cards
 flash summarize <deck>                 # Generate cheat sheet
 ```
 

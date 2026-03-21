@@ -100,7 +100,7 @@ if [ ! -f "$CONFIG_DIR/config.json" ]; then
   "ai": {
     "provider": "openrouter",
     "apiKey": "",
-    "model": "anthropic/claude-sonnet-4"
+    "model": "deepseek/deepseek-chat-v3-0324"
   },
   "scheduler": {
     "algorithm": "fsrs-5"
@@ -135,8 +135,8 @@ else
 fi
 echo ""
 echo "  Quick start:"
+echo "    flash config setup             # Set up API key and model"
 echo "    flash new \"My First Deck\"     # Create a deck"
 echo "    flash add my-first-deck       # Add cards"
 echo "    flash review                  # Start reviewing"
-echo "    flash config                  # Set up AI (optional)"
 echo ""

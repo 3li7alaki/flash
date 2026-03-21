@@ -19,7 +19,7 @@ describe("getDefaultConfig", () => {
 		const config = getDefaultConfig();
 		expect(config.ai.provider).toBe("openrouter");
 		expect(config.ai.apiKey).toBe("");
-		expect(config.ai.model).toBe("anthropic/claude-sonnet-4");
+		expect(config.ai.model).toBe("deepseek/deepseek-chat-v3-0324");
 		expect(config.scheduler.algorithm).toBe("fsrs-5");
 		expect(config.review.aiGrading).toBe(true);
 		expect(config.review.showHints).toBe(true);

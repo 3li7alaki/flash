@@ -11,6 +11,8 @@ user_invocable: true
 
 You have access to the `flash` CLI tool for flashcard management. Use it via Bash.
 
+**Important:** All commands support headless (non-interactive) mode via flags. Never rely on interactive prompts — always pass flags directly so commands work in piped/automated contexts.
+
 ## Commands
 
 ### Generate cards from what you see
@@ -60,11 +62,12 @@ For conversational review inside Claude Code — act as the Quiz Agent:
 ### Analyze and coach
 
 ```bash
-flash weak                       # Find weak areas
+flash weak [--save]              # Find weak areas (--save to auto-save cards)
 flash explain <card-id>          # Deeper explanation
 flash rephrase <card-id>         # Rewrite confusing card
-flash challenge                  # Harder variants of mastered cards
+flash challenge [--save]         # Harder variants of mastered cards (--save to auto-save)
 flash summarize <deck>           # Cheat sheet from a deck
+flash config setup --key <key> [--model <id>]  # Headless config setup
 ```
 
 ### Study with Socratic mode
@@ -80,7 +83,7 @@ Or do it conversationally — teach the user through questions, identify gaps, t
 ```bash
 flash new "Deck Name"            # Create deck
 flash new "Name" --template X    # From template
-flash add <deck>                 # Add card interactively
+flash add <deck> --question '...' --answer '...' [--tags '...'] [--hint '...'] [--type qa|code-output] [--reversible]
 flash edit <deck>                # Open in editor
 flash list                       # List all decks
 flash stats [deck]               # Learning stats
@@ -89,7 +92,7 @@ flash search <query>             # Search across decks
 flash lint [deck]                # Validate format
 flash fix [deck]                 # Auto-fix format issues
 flash export <deck> --format csv # Export to CSV
-flash import <file.csv> [deck]   # Import from CSV
+flash import <file.csv> [deck] [--append]  # Import from CSV
 ```
 
 ### Share and sync

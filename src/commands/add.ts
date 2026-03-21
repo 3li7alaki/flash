@@ -9,11 +9,14 @@ import { findDeck } from "./utils.ts";
 
 export async function addCommand(
 	args: string[],
-	_flags: Record<string, string | boolean>,
+	flags: Record<string, string | boolean>,
 ): Promise<void> {
 	const deckNameOrPath = args[0];
 	if (!deckNameOrPath) {
 		console.error("Usage: flash add <deck>");
+		console.error(
+			"  Headless: flash add <deck> --question '...' --answer '...' [--tags '...'] [--hint '...'] [--type qa|code-output] [--reversible]",
+		);
 		process.exitCode = 1;
 		return;
 	}
@@ -30,76 +33,110 @@ export async function addCommand(
 		return;
 	}
 
-	const question = await prompts.text({
-		message: "Question:",
-		validate: (value) => {
-			if (!value?.trim()) return "Question is required";
-		},
-	});
-	if (prompts.isCancel(question)) {
-		console.log("Cancelled.");
-		return;
-	}
+	// Headless mode: all required fields provided via flags
+	const headless = typeof flags.question === "string";
 
-	const answer = await prompts.text({
-		message: "Answer:",
-		validate: (value) => {
-			if (!value?.trim()) return "Answer is required";
-		},
-	});
-	if (prompts.isCancel(answer)) {
-		console.log("Cancelled.");
-		return;
-	}
+	let questionStr: string;
+	let answerStr: string;
+	let rawTags: string;
+	let hintStr: string;
+	let cardType: CardType;
+	let isReversible: boolean;
 
-	const tagsInput = await prompts.text({
-		message: "Tags (comma-separated, optional):",
-		defaultValue: "",
-	});
-	if (prompts.isCancel(tagsInput)) {
-		console.log("Cancelled.");
-		return;
-	}
+	if (headless) {
+		questionStr = flags.question as string;
+		answerStr = (flags.answer as string) ?? "";
+		rawTags = ((flags.tags as string) ?? "").trim();
+		hintStr = ((flags.hint as string) ?? "").trim();
+		cardType = (flags.type as CardType) ?? "qa";
+		isReversible = flags.reversible === true;
 
-	const hint = await prompts.text({
-		message: "Hint (optional):",
-		defaultValue: "",
-	});
-	if (prompts.isCancel(hint)) {
-		console.log("Cancelled.");
-		return;
-	}
+		if (!questionStr.trim()) {
+			console.error("--question is required");
+			process.exitCode = 1;
+			return;
+		}
+		if (!answerStr.trim()) {
+			console.error("--answer is required");
+			process.exitCode = 1;
+			return;
+		}
+	} else {
+		const question = await prompts.text({
+			message: "Question:",
+			validate: (value) => {
+				if (!value?.trim()) return "Question is required";
+			},
+		});
+		if (prompts.isCancel(question)) {
+			console.log("Cancelled.");
+			return;
+		}
 
-	const typeSelect = await prompts.select({
-		message: "Card type:",
-		options: [
-			{ value: "qa", label: "Q/A" },
-			{ value: "code-output", label: "Code Output" },
-		],
-	});
-	if (prompts.isCancel(typeSelect)) {
-		console.log("Cancelled.");
-		return;
-	}
+		const answer = await prompts.text({
+			message: "Answer:",
+			validate: (value) => {
+				if (!value?.trim()) return "Answer is required";
+			},
+		});
+		if (prompts.isCancel(answer)) {
+			console.log("Cancelled.");
+			return;
+		}
 
-	const reversible = await prompts.confirm({
-		message: "Reversible?",
-		initialValue: false,
-	});
-	if (prompts.isCancel(reversible)) {
-		console.log("Cancelled.");
-		return;
+		const tagsInput = await prompts.text({
+			message: "Tags (comma-separated, optional):",
+			defaultValue: "",
+		});
+		if (prompts.isCancel(tagsInput)) {
+			console.log("Cancelled.");
+			return;
+		}
+
+		const hint = await prompts.text({
+			message: "Hint (optional):",
+			defaultValue: "",
+		});
+		if (prompts.isCancel(hint)) {
+			console.log("Cancelled.");
+			return;
+		}
+
+		const typeSelect = await prompts.select({
+			message: "Card type:",
+			options: [
+				{ value: "qa", label: "Q/A" },
+				{ value: "code-output", label: "Code Output" },
+			],
+		});
+		if (prompts.isCancel(typeSelect)) {
+			console.log("Cancelled.");
+			return;
+		}
+
+		const reversible = await prompts.confirm({
+			message: "Reversible?",
+			initialValue: false,
+		});
+		if (prompts.isCancel(reversible)) {
+			console.log("Cancelled.");
+			return;
+		}
+
+		questionStr = question as string;
+		answerStr = answer as string;
+		rawTags = ((tagsInput as string) ?? "").trim();
+		hintStr = ((hint as string) ?? "").trim();
+		cardType = typeSelect as CardType;
+		isReversible = reversible === true;
 	}
 
 	// Auto-detect cloze
-	const questionStr = question as string;
-	let cardType: CardType = typeSelect as CardType;
 	if (/\{\{.+?\}\}/.test(questionStr)) {
 		cardType = "cloze";
 	}
 
 	const tags: string[] = [];
-	const rawTags = (tagsInput as string).trim();
 	if (rawTags) {
 		for (const part of rawTags.split(",")) {
 			const trimmed = part.trim();
@@ -112,17 +149,16 @@ export async function addCommand(
 	const card: Card = {
 		id: generateCardId(questionStr),
 		question: questionStr,
-		answer: answer as string,
+		answer: answerStr,
 		type: cardType,
 		tags,
 	};
 
-	const hintStr = (hint as string).trim();
 	if (hintStr) {
 		card.hint = hintStr;
 	}
 
-	if (reversible === true) {
+	if (isReversible) {
 		card.reversible = true;
 	}
 

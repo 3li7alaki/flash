@@ -48,19 +48,26 @@ export async function importCommand(
 		const existing = await readFile(deckPath, "utf-8");
 		const existingDeck = parseDeck(existing);
 
-		const shouldAppend = await prompts.confirm({
-			message: `Deck "${kebab}" already exists (${existingDeck.cards.length} cards). Append ${cards.length} cards?`,
-		});
-
-		if (prompts.isCancel(shouldAppend) || !shouldAppend) {
-			console.log("Cancelled.");
-			return;
+		let shouldAppend: boolean;
+		if (_flags.append === true) {
+			shouldAppend = true;
+		} else {
+			const result = await prompts.confirm({
+				message: `Deck "${kebab}" already exists (${existingDeck.cards.length} cards). Append ${cards.length} cards?`,
+			});
+			if (prompts.isCancel(result) || !result) {
+				console.log("Cancelled.");
+				return;
+			}
+			shouldAppend = true;
 		}
 
-		existingDeck.cards.push(...cards);
-		const serialized = serializeDeck(existingDeck);
-		await writeFile(deckPath, serialized, "utf-8");
-		console.log(`Imported ${cards.length} cards into ${kebab}`);
+		if (shouldAppend) {
+			existingDeck.cards.push(...cards);
+			const serialized = serializeDeck(existingDeck);
+			await writeFile(deckPath, serialized, "utf-8");
+			console.log(`Imported ${cards.length} cards into ${kebab}`);
+		}
 	} else {
 		const deck: Deck = {
 			meta: { name: deckName, tags: [] },

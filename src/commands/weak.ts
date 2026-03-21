@@ -62,11 +62,22 @@ export async function weakCommand(
 			console.log();
 		}
 
-		const save = await prompts.confirm({
-			message: "Save suggested cards to a new deck?",
-		});
+		let save: boolean;
+		if (_flags.save === true) {
+			save = true;
+		} else if (_flags.save === false || _flags["no-save"] === true) {
+			save = false;
+		} else {
+			const result = await prompts.confirm({
+				message: "Save suggested cards to a new deck?",
+			});
+			if (prompts.isCancel(result) || !result) {
+				return;
+			}
+			save = true;
+		}
 
-		if (prompts.isCancel(save) || !save) {
+		if (!save) {
 			return;
 		}
 
