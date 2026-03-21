@@ -1,0 +1,14 @@
+@deck Language Learning
+@tags language
+@created TEMPLATE
+
+---
+Q: Hello / How are you?
+A: [Translation in target language]
+tags: greetings, basics
+reversible: true
+---
+Q: {{[Common phrase in target language]}}
+type: cloze
+tags: vocabulary
+---

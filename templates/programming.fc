@@ -1,0 +1,15 @@
+@deck Programming Concepts
+@tags programming
+@created TEMPLATE
+
+---
+Q: What is [concept]?
+A: [Clear, concise definition with an example]
+tags: fundamentals
+---
+Q: What does this code output?
+   [code here]
+A: [Output and explanation]
+type: code-output
+tags: code-reading
+---
