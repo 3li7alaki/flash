@@ -2,6 +2,7 @@
 
 import { addCommand } from "./commands/add.ts";
 import { configCommand } from "./commands/config.ts";
+import { dailyCommand } from "./commands/daily.ts";
 import { doctorCommand } from "./commands/doctor.ts";
 import { editCommand } from "./commands/edit.ts";
 import { exportCommand } from "./commands/export.ts";
@@ -14,7 +15,6 @@ import { newCommand } from "./commands/new.ts";
 import { reviewCommand } from "./commands/review.ts";
 import { searchCommand } from "./commands/search.ts";
 import { statsCommand } from "./commands/stats.ts";
-import { dailyCommand } from "./commands/daily.ts";
 import { templatesCommand } from "./commands/templates.ts";
 import { updateCommand } from "./commands/update.ts";
 import { versionCommand } from "./commands/version.ts";

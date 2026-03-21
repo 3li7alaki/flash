@@ -1,9 +1,9 @@
 import { existsSync } from "node:fs";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
-import { homedir } from "node:os";
 import { join } from "node:path";
 import * as prompts from "@clack/prompts";
 import { loadConfig, resolveDecksDir } from "../config/config.ts";
+import { findTemplate } from "./templates.ts";
 import { toKebabCase } from "./utils.ts";
 
 function getTodayString(): string {
@@ -64,15 +64,25 @@ export async function newCommand(
 
 	const templateName = flags.template;
 	if (typeof templateName === "string" && templateName) {
-		const templateDir = join(homedir(), ".config", "fc", "templates");
-		const templatePath = join(templateDir, `${templateName}.fc`);
+		const templatePath = findTemplate(templateName);
+
+		if (!templatePath) {
+			console.error(`Error: Template not found: ${templateName}`);
+			console.error('Run "fc templates" to see available templates.');
+			process.exitCode = 1;
+			return;
+		}
 
 		try {
 			let content = await readFile(templatePath, "utf-8");
 			content = content.replace(/@deck\s+.*/g, `@deck ${name}`);
+			content = content.replace(
+				/@created\s+TEMPLATE/g,
+				`@created ${getTodayString()}`,
+			);
 			await writeFile(filePath, content, "utf-8");
 		} catch {
-			console.error(`Error: Template not found: ${templatePath}`);
+			console.error(`Error: Could not read template: ${templatePath}`);
 			process.exitCode = 1;
 			return;
 		}
