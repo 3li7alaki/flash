@@ -120,7 +120,7 @@ describe("CLI integration", () => {
 	});
 
 	test("stub command prints not implemented", async () => {
-		const { stdout } = await runCli("gen");
+		const { stdout } = await runCli("share");
 		expect(stdout).toContain("Not implemented yet");
 	});
 });

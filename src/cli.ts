@@ -1,23 +1,30 @@
 #!/usr/bin/env bun
 
 import { addCommand } from "./commands/add.ts";
+import { challengeCommand } from "./commands/challenge.ts";
 import { configCommand } from "./commands/config.ts";
 import { dailyCommand } from "./commands/daily.ts";
 import { doctorCommand } from "./commands/doctor.ts";
 import { editCommand } from "./commands/edit.ts";
+import { explainCommand } from "./commands/explain.ts";
 import { exportCommand } from "./commands/export.ts";
 import { fixCommand } from "./commands/fix.ts";
+import { genCommand } from "./commands/gen.ts";
 import { importCommand } from "./commands/import.ts";
+import { learnCommand } from "./commands/learn.ts";
 import { lintCommand } from "./commands/lint.ts";
 import { listCommand } from "./commands/list.ts";
 import { mergeCommand } from "./commands/merge.ts";
 import { newCommand } from "./commands/new.ts";
+import { rephraseCommand } from "./commands/rephrase.ts";
 import { reviewCommand } from "./commands/review.ts";
 import { searchCommand } from "./commands/search.ts";
 import { statsCommand } from "./commands/stats.ts";
+import { summarizeCommand } from "./commands/summarize.ts";
 import { templatesCommand } from "./commands/templates.ts";
 import { updateCommand } from "./commands/update.ts";
 import { versionCommand } from "./commands/version.ts";
+import { weakCommand } from "./commands/weak.ts";
 
 // --- Flag parsing ---
 
@@ -150,6 +157,13 @@ commands.version = versionCommand;
 commands.update = updateCommand;
 commands.doctor = doctorCommand;
 commands.templates = templatesCommand;
+commands.gen = genCommand;
+commands.learn = learnCommand;
+commands.weak = weakCommand;
+commands.explain = explainCommand;
+commands.rephrase = rephraseCommand;
+commands.challenge = challengeCommand;
+commands.summarize = summarizeCommand;
 
 // --- Help ---
 
