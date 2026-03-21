@@ -4,7 +4,7 @@
 	"module": "src/cli.ts",
 	"type": "module",
 	"bin": {
-		"fc": "src/cli.ts"
+		"flash": "src/cli.ts"
 	},
 	"scripts": {
 		"lint": "biome check .",
@@ -16,7 +16,8 @@
 	"private": true,
 	"devDependencies": {
 		"@biomejs/biome": "^2.4.8",
-		"@types/bun": "latest"
+		"@types/bun": "latest",
+		"@types/pdf-parse": "^1.1.5"
 	},
 	"peerDependencies": {
 		"typescript": "^5"
@@ -25,6 +26,7 @@
 		"@ai-sdk/openai": "^3.0.47",
 		"@clack/prompts": "^1.1.0",
 		"ai": "^6.0.134",
+		"pdf-parse": "^2.4.5",
 		"ts-fsrs": "^5.3.1",
 		"zod": "^4.3.6"
 	}

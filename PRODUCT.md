@@ -1,6 +1,6 @@
 # flash — Product Specification
 
-## What is fc?
+## What is flash?
 
 flash is a CLI flashcard tool that combines spaced repetition scheduling with AI-powered card generation and answer evaluation. It uses a custom plain-text format (`.fc`) designed for both humans and machines, stores review state separately, and integrates into developer workflows via Claude Code.
 
@@ -333,7 +333,7 @@ API key can also be set via `FLASH_API_KEY` environment variable (takes preceden
 
 ~/flashcards/              # Default deck directory (configurable)
   rust-ownership.fc        # Deck file (human-editable)
-  rust-ownership.fc.state  # Review state (managed by fc)
+  rust-ownership.fc.state  # Review state (managed by flash)
 
 src/
   ├── cli.ts               # Entry point, command routing

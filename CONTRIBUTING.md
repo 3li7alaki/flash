@@ -1,4 +1,4 @@
-# Contributing to fc
+# Contributing to flash
 
 ## Getting Started
 
@@ -14,7 +14,7 @@
 ## Project Structure
 
 ```
-fc/
+flash/
 ├── src/
 │   ├── commands/          # CLI command handlers
 │   ├── format/            # .flash parser and serializer

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# fc installer/updater
+# flash installer/updater
 # Install: curl -fsSL https://raw.githubusercontent.com/3li7alaki/flash/main/install.sh | bash
 # Update:  same command — it's idempotent
 set -euo pipefail
@@ -14,16 +14,16 @@ echo ""
 echo "  flash — flashcard CLI with AI superpowers"
 echo ""
 
-# ─── Step 1: Clone or update fc repo ──────────────────────────────────────────
+# ─── Step 1: Clone or update flash repo ──────────────────────────────────────────
 
 if [ -d "$FC_HOME/.git" ]; then
-  echo "  Updating fc..."
+  echo "  Updating flash..."
   git -C "$FC_HOME" fetch origin main -q 2>/dev/null || true
   git -C "$FC_HOME" clean -fd -q 2>/dev/null || true
   git -C "$FC_HOME" reset --hard origin/main -q 2>/dev/null || true
   MODE="update"
 else
-  echo "  Installing fc..."
+  echo "  Installing flash..."
   git clone -q "https://github.com/$REPO.git" "$FC_HOME" 2>/dev/null || {
     # If clone fails (dir exists but not git), remove and retry
     rm -rf "$FC_HOME"
@@ -35,7 +35,7 @@ fi
 # ─── Step 2: Ensure Bun is installed ──────────────────────────────────────────
 
 if ! command -v bun &>/dev/null; then
-  echo "  Bun not found — installing (required for fc CLI)..."
+  echo "  Bun not found — installing (required for flash CLI)..."
   curl -fsSL https://bun.sh/install | bash 2>/dev/null || {
     echo "  ✗ Bun install failed. Install manually: https://bun.sh"
     echo "    flash CLI requires Bun to run."

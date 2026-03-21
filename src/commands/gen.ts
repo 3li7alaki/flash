@@ -1,4 +1,5 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { extname } from "node:path";
 import { join } from "node:path";
 import type { LanguageModel } from "ai";
 import type { ContentType } from "../agents/generator.ts";
@@ -19,6 +20,16 @@ async function readStdin(): Promise<string> {
 		chunks.push(chunk as Buffer);
 	}
 	return Buffer.concat(chunks).toString("utf-8");
+}
+
+async function extractPdf(filePath: string): Promise<string> {
+	// Dynamic import — pdf-parse has inconsistent module exports
+	// biome-ignore lint/suspicious/noExplicitAny: pdf-parse module compat
+	const pdfModule: any = await import("pdf-parse");
+	const pdfParse = pdfModule.default ?? pdfModule;
+	const buffer = await readFile(filePath);
+	const data = await pdfParse(buffer);
+	return data.text as string;
 }
 
 async function fetchUrl(url: string): Promise<string> {
@@ -57,7 +68,13 @@ export async function genCommand(
 			break;
 		}
 		case "file": {
-			content = await readFile(source.value, "utf-8");
+			const ext = extname(source.value).toLowerCase();
+			if (ext === ".pdf") {
+				console.log(`Extracting text from ${source.value}...`);
+				content = await extractPdf(source.value);
+			} else {
+				content = await readFile(source.value, "utf-8");
+			}
 			inferredName =
 				deckName ?? source.value.replace(/\.[^.]+$/, "").replace(/.*\//, "");
 			break;
@@ -74,7 +91,9 @@ export async function genCommand(
 		}
 		case "topic": {
 			if (!source.value.trim()) {
-				console.error("Usage: fc gen <topic> or fc gen --from <file|url>");
+				console.error(
+					"Usage: flash gen <topic> or flash gen --from <file|url>",
+				);
 				process.exitCode = 1;
 				return;
 			}

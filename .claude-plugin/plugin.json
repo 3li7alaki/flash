@@ -1,0 +1,20 @@
+{
+	"name": "flash",
+	"description": "Flashcard CLI with AI superpowers — generate, review, and master flashcards from your terminal and Claude Code",
+	"version": "0.1.0",
+	"author": {
+		"name": "Ali AlHalaki",
+		"email": "alihalaki@outlook.com"
+	},
+	"homepage": "https://github.com/3li7alaki/flash",
+	"repository": "https://github.com/3li7alaki/flash",
+	"license": "MIT",
+	"keywords": [
+		"flashcards",
+		"spaced-repetition",
+		"fsrs",
+		"ai",
+		"learning",
+		"cli"
+	]
+}
