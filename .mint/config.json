@@ -4,7 +4,8 @@
 	"gates": {
 		"lint": "bun run lint",
 		"types": "bun run types",
-		"tests": "bun test"
+		"tests": "bun test",
+		"coverage": false
 	},
 	"reviewers": {
 		"spec": {
@@ -31,34 +32,70 @@
 			"enabled": true,
 			"model": "opus"
 		},
-		"performance": false
+		"performance": {
+			"enabled": false
+		}
 	},
 	"conventions": {
-		"docs": ["CONTRIBUTING.md", "docs/adr/"]
+		"docs": ["CONTRIBUTING.md", "docs/adr/", "biome.json"]
 	},
 	"business": {
 		"docs": ["PRODUCT.md"]
 	},
 	"tdd": {
 		"default": true,
+		"desloppify": true,
 		"coverageThreshold": 80
 	},
-	"definitionOfDone": {
-		"docCheckPassed": true
-	},
-	"isolation": {
-		"plan": "worktree",
-		"ship": "worktree",
-		"quick": "branch"
-	},
-	"signature": true,
-	"documenters": [],
-	"plugins": [],
 	"instincts": {
 		"enabled": true
 	},
 	"modelRouting": {
 		"enabled": true,
 		"override": {}
-	}
+	},
+	"autoCommit": true,
+	"hooks": {
+		"testOnSave": false
+	},
+	"definitionOfDone": {
+		"gatesPassing": true,
+		"specReviewPassed": true,
+		"stage2ReviewsPassed": true,
+		"docCheckPassed": true,
+		"screenshotReminder": false
+	},
+	"isolation": {
+		"plan": "worktree",
+		"ship": "worktree",
+		"quick": "branch"
+	},
+	"browser": {
+		"enabled": false
+	},
+	"context": {
+		"enabled": true,
+		"autoRoute": true,
+		"sandbox": {
+			"timeout": 30000
+		},
+		"session": {
+			"enabled": true
+		}
+	},
+	"design": {
+		"enabled": false
+	},
+	"signature": true,
+	"repoMode": "solo",
+	"challenge": "auto",
+	"reviewScaling": true,
+	"parallel": {
+		"concurrency": 3,
+		"maxBudgetPerSpec": 5
+	},
+	"plugins": [],
+	"mintVersion": "0.8.5",
+	"lastUpdated": "2026-04-16T19:34:10.003Z",
+	"appliedMigrations": ["0.7.6-to-0.8.0", "0.8.4-to-0.8.5"]
 }

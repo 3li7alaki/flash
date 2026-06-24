@@ -19,4 +19,8 @@ Violations trigger immediate stop and escalation to user.
 - Subagents return summaries only
 
 ## Project-Specific
-<!-- Add your own rules below -->
+- NEVER mix card content and review state — `.fc` files hold content, `.fc.state` files hold scheduling data
+- NEVER call AI agents without first checking `config.ai.enabled` — AI is optional, core review works offline
+- NEVER use interactive prompts for paths that must work headlessly — all commands need flag-based equivalents
+- NEVER use expensive models (GPT-4, Claude Opus) for AI card generation — default is DeepSeek V3
+- NEVER call `flash gen` from within the codebase to generate cards — write `.fc` files directly

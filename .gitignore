@@ -5,3 +5,23 @@ dist/
 .mint/worktrees/
 .mint/plugins/
 .mint/.session-state.json
+.mint/.freeze-list.json
+.mint/.browser-sessions.json
+.mint/.gate-ledger.jsonl
+.mint/.context-index/
+.mint/.design-profile.json
+.mint/.workspace-cache.json
+.mint/.routing-cache.json
+.mint/.model-ledger.jsonl
+
+# mint local state
+.mint/sessions/
+.mint/ssh-cache.json
+.mint/.dream-lock
+.mint/dream-report.md
+.mint/issues-archive.jsonl
+.mint/wins-archive.jsonl
+.mint/skills/
+.mint/workflows.jsonl
+.mint/workflow-candidates.jsonl
+.mint/.config-backup-*.json

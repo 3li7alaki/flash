@@ -143,6 +143,41 @@
 					"description": "Project structure must reflect actual directory layout"
 				}
 			]
+		},
+		{
+			"path": "docs/adr/",
+			"description": "Architecture Decision Records — rationale for key technical choices (format, agents, state, runtime)",
+			"trigger": "on-architectural-change",
+			"sections": [
+				{
+					"id": "adr-fc-format",
+					"heading": "docs/adr/001-fc-format.md",
+					"tracks": ["src/format/**/*.ts"],
+					"staleness": "git-diff",
+					"description": "FC format ADR must stay aligned with parser implementation"
+				},
+				{
+					"id": "adr-agent-architecture",
+					"heading": "docs/adr/002-agent-architecture.md",
+					"tracks": ["src/agents/**/*.ts", "src/ai/**/*.ts"],
+					"staleness": "git-diff",
+					"description": "Agent architecture ADR must reflect actual agent design"
+				},
+				{
+					"id": "adr-state-separation",
+					"heading": "docs/adr/003-state-separation.md",
+					"tracks": ["src/state/**/*.ts"],
+					"staleness": "git-diff",
+					"description": "State separation ADR must reflect .fc vs .fc.state split"
+				},
+				{
+					"id": "adr-bun-runtime",
+					"heading": "docs/adr/004-bun-runtime.md",
+					"tracks": ["package.json", "bun.lock"],
+					"staleness": "git-diff",
+					"description": "Bun runtime ADR — update if runtime changes"
+				}
+			]
 		}
 	]
 }
