@@ -15,7 +15,6 @@ export function buildTeacherMessage(input: TeacherInput): string {
 
 export const teacherAgent = defineAgent<TeacherInput, string>({
 	name: "teacher",
-	role: "Teaches a topic through Socratic questioning, identifies knowledge gaps",
 	tier: "balanced",
 	temperature: 0.7,
 	systemPrompt: [

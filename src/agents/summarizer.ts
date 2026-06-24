@@ -21,7 +21,6 @@ export function buildSummarizerMessage(input: SummarizerInput): string {
 
 export const summarizerAgent = defineAgent<SummarizerInput, string>({
 	name: "summarizer",
-	role: "Creates a study cheat sheet from a deck of flashcards",
 	tier: "fast",
 	temperature: 0.3,
 	systemPrompt: [

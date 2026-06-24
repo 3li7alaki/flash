@@ -4,7 +4,6 @@ import type { ModelTier } from "./client.ts";
 
 export interface AgentDefinition<TInput, TOutput> {
 	name: string;
-	role: string;
 	tier: ModelTier;
 	systemPrompt: string;
 	buildUserMessage: (input: TInput) => string;

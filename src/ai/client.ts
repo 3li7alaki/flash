@@ -3,12 +3,11 @@ import type { LanguageModel } from "ai";
 import { getApiKey, loadConfig } from "../config/config.ts";
 import type { FcConfig } from "../types.ts";
 
-export type ModelTier = "fast" | "balanced" | "heavy";
+export type ModelTier = "fast" | "balanced";
 
 const DEFAULT_MODELS: Record<ModelTier, string> = {
 	fast: "anthropic/claude-haiku",
 	balanced: "anthropic/claude-sonnet-4",
-	heavy: "anthropic/claude-sonnet-4",
 };
 
 export function createProvider(apiKey: string, modelId: string): LanguageModel {

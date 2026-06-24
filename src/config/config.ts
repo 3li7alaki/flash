@@ -96,23 +96,12 @@ export async function saveConfig(
 	await writeFile(path, `${JSON.stringify(config, null, 2)}\n`, "utf-8");
 }
 
-type Migration = {
-	from: number;
-	to: number;
-	migrate: (config: FcConfig) => { config: FcConfig; description: string };
-};
-
-const migrations: Migration[] = [
-	// Future migrations go here, e.g.:
-	// { from: 1, to: 2, migrate: (config) => ({ config: { ...config, newField: "default" }, description: "Added newField" }) }
-];
-
 export function migrateConfig(config: FcConfig): {
 	config: FcConfig;
 	migrated: boolean;
 	changes: string[];
 } {
-	let current = { ...config };
+	const current = { ...config };
 	const changes: string[] = [];
 	let migrated = false;
 
@@ -121,25 +110,6 @@ export function migrateConfig(config: FcConfig): {
 		current.version = CURRENT_VERSION;
 		changes.push("Added version field (set to v1)");
 		migrated = true;
-	}
-
-	// Run sequential migrations
-	let safetyCounter = 0;
-	while (
-		current.version !== undefined &&
-		current.version < CURRENT_VERSION &&
-		safetyCounter < 100
-	) {
-		const migration = migrations.find((m) => m.from === current.version);
-		if (!migration) {
-			break;
-		}
-		const result = migration.migrate(current);
-		current = result.config;
-		current.version = migration.to;
-		changes.push(result.description);
-		migrated = true;
-		safetyCounter++;
 	}
 
 	return { config: current, migrated, changes };

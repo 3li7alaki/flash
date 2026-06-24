@@ -25,7 +25,6 @@ export function buildGraderMessage(input: GraderInput): string {
 
 export const graderAgent = defineAgent<GraderInput, GraderOutput>({
 	name: "grader",
-	role: "Evaluates user answers against correct answers using semantic similarity",
 	tier: "fast",
 	temperature: 0.2,
 	systemPrompt: [

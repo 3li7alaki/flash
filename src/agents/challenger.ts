@@ -18,7 +18,6 @@ export function buildChallengerMessage(input: ChallengerInput): string {
 
 export const challengerAgent = defineAgent<ChallengerInput, string>({
 	name: "challenger",
-	role: "Generates harder variants of mastered cards to test deeper understanding",
 	tier: "balanced",
 	temperature: 0.7,
 	systemPrompt: [

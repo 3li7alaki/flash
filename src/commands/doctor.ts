@@ -86,7 +86,11 @@ async function checkDecksDir(): Promise<CheckResult> {
 	const isLocal = dir !== globalDir;
 	if (existsSync(dir)) {
 		const suffix = isLocal ? " (local)" : "";
-		return { label: "Decks directory", status: "pass", message: `${dir}${suffix}` };
+		return {
+			label: "Decks directory",
+			status: "pass",
+			message: `${dir}${suffix}`,
+		};
 	}
 	return {
 		label: "Decks directory",

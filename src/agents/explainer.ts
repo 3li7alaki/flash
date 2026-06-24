@@ -24,7 +24,6 @@ export function buildExplainerMessage(input: ExplainerInput): string {
 
 export const explainerAgent = defineAgent<ExplainerInput, string>({
 	name: "explainer",
-	role: "Provides deeper explanations or rephrases confusing cards",
 	tier: "balanced",
 	temperature: 0.5,
 	systemPrompt: [

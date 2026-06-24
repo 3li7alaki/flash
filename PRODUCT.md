@@ -156,7 +156,7 @@ All metadata is optional. A file with just cards and `---` separators is valid.
 }
 ```
 
-**Card ID migration:** When a question is edited, a new ID is generated. The scheduler attempts to migrate state via Levenshtein distance. If no match, the card starts fresh.
+**Card ID migration:** When a question is edited, a new ID is generated and the card starts fresh — its prior review state is dropped.
 
 ---
 

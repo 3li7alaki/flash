@@ -61,7 +61,6 @@ When the user asks to generate flashcards from code, docs, or context:
 ```bash
 flash review [deck-name]         # Review due cards
 flash review --tag <tag>         # Review by tag
-flash review --mix               # Interleave across decks
 ```
 
 For conversational review inside Claude Code — act as the Quiz Agent:

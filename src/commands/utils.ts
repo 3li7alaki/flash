@@ -1,5 +1,7 @@
 import { readdirSync } from "node:fs";
+import { readdir } from "node:fs/promises";
 import { basename, extname, isAbsolute, join } from "node:path";
+import { parseDeck } from "../format/parser.ts";
 
 /**
  * Convert a deck name to a kebab-case filename (without extension).
@@ -67,4 +69,30 @@ export function findDeck(nameOrPath: string, decksDir: string): string {
 	}
 
 	return join(decksDir, matches[0] as string);
+}
+
+/**
+ * Copy all .fc files from a cloned repo directory into decksDir,
+ * parsing each to accumulate a total card count.
+ * Returns the total number of cards across the copied decks.
+ */
+export async function copyDeckFiles(
+	cloneDir: string,
+	decksDir: string,
+): Promise<number> {
+	let cardCount = 0;
+	const entries = await readdir(cloneDir);
+	const fcFiles = entries.filter((f) => f.endsWith(".fc"));
+
+	for (const file of fcFiles) {
+		const src = join(cloneDir, file);
+		const dest = join(decksDir, file);
+		const content = await Bun.file(src).text();
+		await Bun.write(dest, content);
+
+		const deck = parseDeck(content);
+		cardCount += deck.cards.length;
+	}
+
+	return cardCount;
 }

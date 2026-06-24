@@ -1,6 +1,5 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
-import { extname } from "node:path";
-import { join } from "node:path";
+import { extname, join } from "node:path";
 import type { LanguageModel } from "ai";
 import type { ContentType } from "../agents/generator.ts";
 import {

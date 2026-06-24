@@ -43,7 +43,6 @@ export function buildAnalyzerMessage(input: AnalyzerInput): string {
 
 export const analyzerAgent = defineAgent<AnalyzerInput, AnalyzerOutput>({
 	name: "analyzer",
-	role: "Analyzes review patterns to find weak areas and suggest targeted cards",
 	tier: "fast",
 	temperature: 0.3,
 	systemPrompt: [

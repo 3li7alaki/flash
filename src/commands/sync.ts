@@ -1,8 +1,7 @@
 import { existsSync } from "node:fs";
-import { readdir } from "node:fs/promises";
 import { join } from "node:path";
 import { loadConfig, resolveDecksDir, saveConfig } from "../config/config.ts";
-import { parseDeck } from "../format/parser.ts";
+import { copyDeckFiles } from "./utils.ts";
 
 export async function syncCommand(
 	_args: string[],
@@ -38,19 +37,7 @@ export async function syncCommand(
 		await proc.exited;
 
 		// Copy .fc files into decks dir
-		const entries = await readdir(cloneDir);
-		const fcFiles = entries.filter((f) => f.endsWith(".fc"));
-
-		let deckCards = 0;
-		for (const file of fcFiles) {
-			const src = join(cloneDir, file);
-			const dest = join(decksDir, file);
-			const content = await Bun.file(src).text();
-			await Bun.write(dest, content);
-
-			const deck = parseDeck(content);
-			deckCards += deck.cards.length;
-		}
+		const deckCards = await copyDeckFiles(cloneDir, decksDir);
 
 		entry.lastSync = new Date().toISOString();
 		totalCards += deckCards;

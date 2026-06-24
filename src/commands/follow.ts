@@ -1,8 +1,8 @@
 import { existsSync } from "node:fs";
-import { mkdir, readdir } from "node:fs/promises";
+import { mkdir } from "node:fs/promises";
 import { join } from "node:path";
 import { loadConfig, resolveDecksDir, saveConfig } from "../config/config.ts";
-import { parseDeck } from "../format/parser.ts";
+import { copyDeckFiles } from "./utils.ts";
 
 /**
  * Extract repo name from a GitHub URL.
@@ -65,19 +65,7 @@ export async function followCommand(
 	}
 
 	// Copy .fc files from clone into decks dir
-	let cardCount = 0;
-	const entries = await readdir(cloneDir);
-	const fcFiles = entries.filter((f) => f.endsWith(".fc"));
-
-	for (const file of fcFiles) {
-		const src = join(cloneDir, file);
-		const dest = join(decksDir, file);
-		const content = await Bun.file(src).text();
-		await Bun.write(dest, content);
-
-		const deck = parseDeck(content);
-		cardCount += deck.cards.length;
-	}
+	const cardCount = await copyDeckFiles(cloneDir, decksDir);
 
 	// Store follow relationship in config
 	followed.push({

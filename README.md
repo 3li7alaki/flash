@@ -57,6 +57,8 @@ tags: reliability
 
 **Card types:** Q/A, cloze (`{{answer}}`), code-output, MCQ (`choices:`), true/false, reversible
 
+> Full `.fc` format spec, parsing rules, and config schema: **[PRODUCT.md](PRODUCT.md)**
+
 **Your data, your files.** Plain text. Diff them, version them, share them via git. Review state lives in separate `.fc.state` files so content stays clean.
 
 **Project-local decks.** Create a `.flashcards/` directory in any project and flash auto-discovers it — like git finds `.git/`. Falls back to `~/flashcards` when no local directory is found.

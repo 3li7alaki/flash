@@ -75,7 +75,6 @@ export function detectContentSource(
 
 export const generatorAgent = defineAgent<GeneratorInput, string>({
 	name: "generator",
-	role: "Creates high-quality flashcards from source content",
 	tier: "balanced",
 	temperature: 0.7,
 	systemPrompt: [
