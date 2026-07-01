@@ -1,3 +1,0 @@
-{"category":"naming","observation":"camelCase-functions","confidence":16,"occurrences":16,"firstSeen":"2026-06-24T21:45:20.223Z","lastSeen":"2026-06-24T21:50:51.728Z","sources":["observer"],"examples":["utils.ts","state.ts","follow.ts","sync.ts","state.test.ts"]}
-{"category":"tests","observation":"describe-it-pattern","confidence":3,"occurrences":3,"firstSeen":"2026-06-24T21:46:19.506Z","lastSeen":"2026-06-24T21:46:58.066Z","sources":["observer"],"examples":["state.test.ts"]}
-{"category":"tests","observation":"expect-assertions","confidence":3,"occurrences":3,"firstSeen":"2026-06-24T21:46:19.506Z","lastSeen":"2026-06-24T21:46:58.067Z","sources":["observer"],"examples":["state.test.ts"]}

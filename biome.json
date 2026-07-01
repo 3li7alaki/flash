@@ -7,7 +7,7 @@
 	},
 	"files": {
 		"ignoreUnknown": true,
-		"includes": ["**", "!.mint/"]
+		"includes": ["**"]
 	},
 	"formatter": {
 		"enabled": true,
